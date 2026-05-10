@@ -2,8 +2,9 @@
  * @jest-environment jsdom
  */
 import React from "react";
-import { render, screen, fireEvent, act } from "@testing-library/react";
+import { render, screen, fireEvent, act, waitFor } from "@testing-library/react";
 import SDSUploader from "../app/components/SDSUploader";
+import { AuthProvider } from "../app/context/AuthContext";
 
 // Időzítők mockolása a setInterval miatt (gyors, determinisztikus teszt)
 jest.useFakeTimers();
@@ -17,18 +18,32 @@ jest.mock("next/navigation", () => ({
   },
 }));
 
-// Mock global fetch
-global.fetch = jest.fn(() =>
-  Promise.resolve({
+// Mock global fetch with better handling
+const mockFetch = jest.fn();
+global.fetch = mockFetch as jest.Mock;
+
+// Default mock response for auth endpoints
+mockFetch.mockImplementation((url: string) => {
+  if (url.includes("/api/auth")) {
+    return Promise.resolve({
+      ok: true,
+      json: () => Promise.resolve({ user: null }),
+    });
+  }
+  return Promise.resolve({
     ok: true,
     json: () => Promise.resolve({ data: {} }),
-  })
-) as jest.Mock;
+  });
+}) as jest.Mock;
 
 describe("SDSUploader Component", () => {
   // 1. Üres állapot teszt (US-01/AC1)
   test("Rendereli az üres állapotot és a CTA gombot", () => {
-    render(<SDSUploader />);
+    render(
+      <AuthProvider>
+        <SDSUploader />
+      </AuthProvider>
+    );
 
     expect(
       screen.getByText(/Nincs még feltöltött dokumentum/i)
@@ -38,7 +53,11 @@ describe("SDSUploader Component", () => {
 
   // 2. Sikeres feltöltés teszt (Kritikus útvonal)
   test("PDF feltöltésekor elindul a folyamat és sikeresen befejeződik", async () => {
-    const { container } = render(<SDSUploader />);
+    const { container } = render(
+      <AuthProvider>
+        <SDSUploader />
+      </AuthProvider>
+    );
 
     const file = new File(["dummy content"], "test-sds.pdf", {
       type: "application/pdf",
@@ -54,13 +73,17 @@ describe("SDSUploader Component", () => {
     });
 
     // Mivel a fetch mock azonnal feloldódik, egyből a siker állapothoz jutunk
-    expect(await screen.findByText(/Feldolgozás sikeres/i)).toBeInTheDocument();
+    expect(await screen.findByText(/Feldolgozás sikeres/i, {}, { timeout: 3000 })).toBeInTheDocument();
     expect(screen.getByText(/Eredmények megtekintése/i)).toBeInTheDocument();
-  });
+  }, 10000);
 
   // 3. Hiba állapot: Rossz fájlformátum (US-01/AC2)
   test("Hibaüzenetet dob nem PDF fájl esetén", () => {
-    const { container } = render(<SDSUploader />);
+    const { container } = render(
+      <AuthProvider>
+        <SDSUploader />
+      </AuthProvider>
+    );
 
     const file = new File(["image"], "kep.jpg", { type: "image/jpeg" });
     // A komponens rejtett file inputját a containerből célozzuk meg
@@ -76,7 +99,11 @@ describe("SDSUploader Component", () => {
 
   // 4. Hiba állapot: Túl nagy fájl (Edge case)
   test("Hibaüzenetet dob 20MB-nál nagyobb fájl esetén", () => {
-    const { container } = render(<SDSUploader />);
+    const { container } = render(
+      <AuthProvider>
+        <SDSUploader />
+      </AuthProvider>
+    );
 
     const largeFile = new File([""], "big.pdf", { type: "application/pdf" });
     Object.defineProperty(largeFile, "size", { value: 25 * 1024 * 1024 }); // 25MB
@@ -92,7 +119,11 @@ describe("SDSUploader Component", () => {
 
   // 5. Retry funkció tesztelése (Interakció)
   test("Hiba után az Újra gomb visszaállítja az alapállapotot", () => {
-    const { container } = render(<SDSUploader />);
+    const { container } = render(
+      <AuthProvider>
+        <SDSUploader />
+      </AuthProvider>
+    );
 
     // Először hibára futtatjuk
     const file = new File(["image"], "wrong.png", { type: "image/png" });

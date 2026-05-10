@@ -1,12 +1,15 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { UploadState } from "../types";
+import { useAuth } from "../context/AuthContext";
 
 export default function SDSUploader() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
+  const { user, uploadLimit, checkUpload } = useAuth();
 
   // State initialization
   const [state, setState] = useState<UploadState>({
@@ -14,6 +17,11 @@ export default function SDSUploader() {
     fileNames: [],
     progress: 0,
   });
+
+  // Check upload limit on mount
+  useEffect(() => {
+    checkUpload();
+  }, [checkUpload]);
 
   // --- Logic Helpers ---
 
@@ -31,6 +39,19 @@ export default function SDSUploader() {
 
   const simulateUpload = async (files: File[]) => {
     if (files.length === 0) return;
+
+    // Check upload limit
+    if (!uploadLimit.allowed) {
+      setState({
+        status: "ERROR",
+        fileNames: files.map(f => f.name),
+        progress: 0,
+        errorMessage: user 
+          ? "Szerverhiba történt. Próbálkozz később."
+          : "Elérted a napi 5 feltöltési limitet. Holnap újrapróbálhatsz vagy regisztrálj az unlimited feltöltéshez.",
+      });
+      return;
+    }
 
     for (const file of files) {
       const error = validateFile(file);
@@ -68,7 +89,8 @@ export default function SDSUploader() {
           });
 
           if (!response.ok) {
-            throw new Error(`Hiba a szerver oldalon ennél a fájlnál: ${file.name}`);
+            const error = await response.json();
+            throw new Error(error.error || `Hiba a szerver oldalon ennél a fájlnál: ${file.name}`);
           }
 
           const result = await response.json();
@@ -184,6 +206,23 @@ export default function SDSUploader() {
           <button className="px-6 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition">
             + Elemek hozzáadása
           </button>
+
+          {/* Upload limit indicator */}
+          {uploadLimit.limit !== Infinity && (
+            <div className="mt-6 pt-6 border-t border-slate-200">
+              <p className="text-sm text-slate-600 mb-3">
+                <span className="font-medium">{uploadLimit.remaining}/{uploadLimit.limit}</span> feltöltés marad ma
+              </p>
+              {!user && (
+                <Link
+                  href="/register"
+                  className="inline-block bg-gradient-to-r from-blue-600 to-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium hover:shadow-lg transition"
+                >
+                  Regisztrálj az unlimited feltöltéshez →
+                </Link>
+              )}
+            </div>
+          )}
         </div>
       )}
 

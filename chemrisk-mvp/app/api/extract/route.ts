@@ -1,9 +1,32 @@
 import { NextRequest, NextResponse } from "next/server";
 import { GoogleGenerativeAI, SchemaType, Schema } from "@google/generative-ai";
 import { ExtractedData } from "../../types";
+import { parseToken, canUpload, recordUpload } from "../../lib/auth";
 
 export async function POST(request: NextRequest) {
   try {
+    // Check upload limit
+    const token = request.cookies.get("auth_token")?.value;
+    let userId: string | undefined = undefined;
+
+    if (token) {
+      const parsed = parseToken(token);
+      userId = parsed?.userId;
+    }
+
+    const ipAddress =
+      request.headers.get("x-forwarded-for") ||
+      request.headers.get("x-real-ip") ||
+      "unknown";
+
+    const { allowed } = canUpload(userId, ipAddress);
+    if (!allowed) {
+      return NextResponse.json(
+        { error: "A napi feltöltési limit eléri. Próbálkozz holnap." },
+        { status: 429 }
+      );
+    }
+
     const formData = await request.formData();
     const file = formData.get("file") as File | null;
 
@@ -105,6 +128,9 @@ A válaszod formátuma pontosan egyezzen meg a kért JSON sémával.`;
       console.error("JSON parse error from Gemini:", e, "Response:", responseText);
       throw new Error("Érvénytelen JSON válasz a modelltől.");
     }
+
+    // Record the upload after successful extraction
+    recordUpload(userId, ipAddress);
 
     return NextResponse.json({ data: extractedData });
   } catch (error) {

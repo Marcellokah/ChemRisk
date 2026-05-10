@@ -4,6 +4,7 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import ResultsPage from "../app/results/page";
+import { AuthProvider } from "../app/context/AuthContext";
 
 // Mock next/link to avoid router errors
 jest.mock("next/link", () => {
@@ -12,9 +13,33 @@ jest.mock("next/link", () => {
   };
 });
 
+// Mock next/navigation
+jest.mock("next/navigation", () => ({
+  useRouter() {
+    return {
+      push: jest.fn(),
+    };
+  },
+}));
+
+// Mock global fetch
+jest.mock("node-fetch", () => ({
+  __esModule: true,
+  default: jest.fn(() =>
+    Promise.resolve({
+      ok: true,
+      json: () => Promise.resolve({ user: null }),
+    })
+  ),
+}));
+
 describe("Results Page", () => {
   test("Rendereli a kinyert adatokat", () => {
-    render(<ResultsPage />);
+    render(
+      <AuthProvider>
+        <ResultsPage />
+      </AuthProvider>
+    );
 
     // Terméknév
     expect(screen.getByText("Acetone Extra Pure (Fallback)")).toBeInTheDocument();

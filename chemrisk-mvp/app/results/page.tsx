@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import ResultsClient from "./ResultsClient";
+import Header from "../components/Header";
 import { ExtractedData } from "../types";
 
 // Mock data to simulate the extracted content (fallback)
@@ -64,25 +65,7 @@ export default function ResultsPage() {
 
   return (
     <main className="min-h-screen bg-slate-50 text-slate-900 font-sans">
-      {/* Header */}
-      <header className="bg-white border-b border-slate-200 sticky top-0 z-10">
-        <div className="max-w-5xl mx-auto px-6 py-4 flex justify-between items-center">
-          <div className="flex items-center space-x-2">
-            <div className="bg-blue-600 text-white font-bold p-2 rounded">
-              CR
-            </div>
-            <span className="text-xl font-bold tracking-tight">ChemRisk</span>
-          </div>
-          <nav className="hidden md:flex space-x-6 text-sm font-medium text-slate-600">
-            <Link href="/files" className="hover:text-blue-600 my-auto">
-              Dokumentumok kezelése
-            </Link>
-            <Link href="/" className="text-blue-600 bg-blue-50 px-3 py-1 rounded-md">
-              Feltöltés
-            </Link>
-          </nav>
-        </div>
-      </header>
+      <Header />
 
       {/* Main Content */}
       <section className="max-w-5xl mx-auto px-6 py-12">

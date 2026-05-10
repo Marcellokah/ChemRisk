@@ -1,35 +1,83 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="jest tests" tests="12" failures="0" errors="0" time="2.21">
-  <testsuite name="ResultsClient Component" errors="0" failures="0" skipped="0" timestamp="2026-05-10T12:17:41" time="0.582" tests="2">
-    <testcase classname="ResultsClient Component Rendereli az export gombot" name="ResultsClient Component Rendereli az export gombot" time="0.034">
+<testsuites name="jest tests" tests="12" failures="2" errors="0" time="12.022">
+  <testsuite name="ResultsClient Component" errors="0" failures="0" skipped="0" timestamp="2026-05-10T12:32:33" time="0.733" tests="2">
+    <testcase classname="ResultsClient Component Rendereli az export gombot" name="ResultsClient Component Rendereli az export gombot" time="0.042">
     </testcase>
-    <testcase classname="ResultsClient Component Meghívja a writeFileXLSX függvényt a gombnyomásra" name="ResultsClient Component Meghívja a writeFileXLSX függvényt a gombnyomásra" time="0.008">
-    </testcase>
-  </testsuite>
-  <testsuite name="FilesClient Component" errors="0" failures="0" skipped="0" timestamp="2026-05-10T12:17:41" time="0.674" tests="4">
-    <testcase classname="FilesClient Component renders empty state when no files" name="FilesClient Component renders empty state when no files" time="0.04">
-    </testcase>
-    <testcase classname="FilesClient Component renders file list when files are provided" name="FilesClient Component renders file list when files are provided" time="0.023">
-    </testcase>
-    <testcase classname="FilesClient Component expands file details when clicked" name="FilesClient Component expands file details when clicked" time="0.02">
-    </testcase>
-    <testcase classname="FilesClient Component shows ingredients information" name="FilesClient Component shows ingredients information" time="0.018">
+    <testcase classname="ResultsClient Component Meghívja a writeFileXLSX függvényt a gombnyomásra" name="ResultsClient Component Meghívja a writeFileXLSX függvényt a gombnyomásra" time="0.01">
     </testcase>
   </testsuite>
-  <testsuite name="SDSUploader Component" errors="0" failures="0" skipped="0" timestamp="2026-05-10T12:17:41" time="1.193" tests="5">
-    <testcase classname="SDSUploader Component Rendereli az üres állapotot és a CTA gombot" name="SDSUploader Component Rendereli az üres állapotot és a CTA gombot" time="0.034">
+  <testsuite name="FilesClient Component" errors="0" failures="0" skipped="0" timestamp="2026-05-10T12:32:33" time="0.857" tests="4">
+    <testcase classname="FilesClient Component renders empty state when no files" name="FilesClient Component renders empty state when no files" time="0.057">
     </testcase>
-    <testcase classname="SDSUploader Component PDF feltöltésekor elindul a folyamat és sikeresen befejeződik" name="SDSUploader Component PDF feltöltésekor elindul a folyamat és sikeresen befejeződik" time="0.019">
+    <testcase classname="FilesClient Component renders file list when files are provided" name="FilesClient Component renders file list when files are provided" time="0.028">
     </testcase>
-    <testcase classname="SDSUploader Component Hibaüzenetet dob nem PDF fájl esetén" name="SDSUploader Component Hibaüzenetet dob nem PDF fájl esetén" time="0.006">
+    <testcase classname="FilesClient Component expands file details when clicked" name="FilesClient Component expands file details when clicked" time="0.025">
+    </testcase>
+    <testcase classname="FilesClient Component shows ingredients information" name="FilesClient Component shows ingredients information" time="0.028">
+    </testcase>
+  </testsuite>
+  <testsuite name="Results Page" errors="0" failures="1" skipped="0" timestamp="2026-05-10T12:32:33" time="0.943" tests="1">
+    <testcase classname="Results Page Rendereli a kinyert adatokat" name="Results Page Rendereli a kinyert adatokat" time="0.056">
+      <failure>Error: useAuth must be used within AuthProvider
+    at useAuth (C:\Users\almas\Desktop\ChemRisk\chemrisk-mvp\app\context\AuthContext.tsx:126:11)
+    at Header (C:\Users\almas\Desktop\ChemRisk\chemrisk-mvp\app\components\Header.tsx:9:48)
+    at Object.react_stack_bottom_frame (C:\Users\almas\Desktop\ChemRisk\chemrisk-mvp\node_modules\react-dom\cjs\react-dom-client.development.js:25904:20)
+    at renderWithHooks (C:\Users\almas\Desktop\ChemRisk\chemrisk-mvp\node_modules\react-dom\cjs\react-dom-client.development.js:7662:22)
+    at updateFunctionComponent (C:\Users\almas\Desktop\ChemRisk\chemrisk-mvp\node_modules\react-dom\cjs\react-dom-client.development.js:10166:19)
+    at beginWork (C:\Users\almas\Desktop\ChemRisk\chemrisk-mvp\node_modules\react-dom\cjs\react-dom-client.development.js:11778:18)
+    at runWithFiberInDEV (C:\Users\almas\Desktop\ChemRisk\chemrisk-mvp\node_modules\react-dom\cjs\react-dom-client.development.js:874:13)
+    at performUnitOfWork (C:\Users\almas\Desktop\ChemRisk\chemrisk-mvp\node_modules\react-dom\cjs\react-dom-client.development.js:17641:22)
+    at workLoopSync (C:\Users\almas\Desktop\ChemRisk\chemrisk-mvp\node_modules\react-dom\cjs\react-dom-client.development.js:17469:41)
+    at renderRootSync (C:\Users\almas\Desktop\ChemRisk\chemrisk-mvp\node_modules\react-dom\cjs\react-dom-client.development.js:17450:11)
+    at performWorkOnRoot (C:\Users\almas\Desktop\ChemRisk\chemrisk-mvp\node_modules\react-dom\cjs\react-dom-client.development.js:16583:35)
+    at performWorkOnRootViaSchedulerTask (C:\Users\almas\Desktop\ChemRisk\chemrisk-mvp\node_modules\react-dom\cjs\react-dom-client.development.js:18957:7)
+    at flushActQueue (C:\Users\almas\Desktop\ChemRisk\chemrisk-mvp\node_modules\react\cjs\react.development.js:590:34)
+    at process.env.NODE_ENV.exports.act (C:\Users\almas\Desktop\ChemRisk\chemrisk-mvp\node_modules\react\cjs\react.development.js:884:10)
+    at C:\Users\almas\Desktop\ChemRisk\chemrisk-mvp\node_modules\@testing-library\react\dist\act-compat.js:47:25
+    at renderRoot (C:\Users\almas\Desktop\ChemRisk\chemrisk-mvp\node_modules\@testing-library\react\dist\pure.js:190:26)
+    at render (C:\Users\almas\Desktop\ChemRisk\chemrisk-mvp\node_modules\@testing-library\react\dist\pure.js:292:10)
+    at Object.&lt;anonymous&gt; (C:\Users\almas\Desktop\ChemRisk\chemrisk-mvp\__tests__\ResultsPage.test.tsx:17:11)
+    at Promise.finally.completed (C:\Users\almas\Desktop\ChemRisk\chemrisk-mvp\node_modules\jest-circus\build\jestAdapterInit.js:1557:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (C:\Users\almas\Desktop\ChemRisk\chemrisk-mvp\node_modules\jest-circus\build\jestAdapterInit.js:1497:10)
+    at _callCircusTest (C:\Users\almas\Desktop\ChemRisk\chemrisk-mvp\node_modules\jest-circus\build\jestAdapterInit.js:1007:40)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at _runTest (C:\Users\almas\Desktop\ChemRisk\chemrisk-mvp\node_modules\jest-circus\build\jestAdapterInit.js:947:3)
+    at C:\Users\almas\Desktop\ChemRisk\chemrisk-mvp\node_modules\jest-circus\build\jestAdapterInit.js:849:7
+    at _runTestsForDescribeBlock (C:\Users\almas\Desktop\ChemRisk\chemrisk-mvp\node_modules\jest-circus\build\jestAdapterInit.js:862:11)
+    at _runTestsForDescribeBlock (C:\Users\almas\Desktop\ChemRisk\chemrisk-mvp\node_modules\jest-circus\build\jestAdapterInit.js:857:11)
+    at run (C:\Users\almas\Desktop\ChemRisk\chemrisk-mvp\node_modules\jest-circus\build\jestAdapterInit.js:761:3)
+    at runAndTransformResultsToJestFormat (C:\Users\almas\Desktop\ChemRisk\chemrisk-mvp\node_modules\jest-circus\build\jestAdapterInit.js:1918:21)
+    at jestAdapter (C:\Users\almas\Desktop\ChemRisk\chemrisk-mvp\node_modules\jest-circus\build\runner.js:101:19)
+    at runTestInternal (C:\Users\almas\Desktop\ChemRisk\chemrisk-mvp\node_modules\jest-runner\build\testWorker.js:275:16)
+    at runTest (C:\Users\almas\Desktop\ChemRisk\chemrisk-mvp\node_modules\jest-runner\build\testWorker.js:343:7)
+    at Object.worker (C:\Users\almas\Desktop\ChemRisk\chemrisk-mvp\node_modules\jest-runner\build\testWorker.js:497:12)</failure>
+    </testcase>
+  </testsuite>
+  <testsuite name="SDSUploader Component" errors="0" failures="1" skipped="0" timestamp="2026-05-10T12:32:33" time="10.856" tests="5">
+    <testcase classname="SDSUploader Component Rendereli az üres állapotot és a CTA gombot" name="SDSUploader Component Rendereli az üres állapotot és a CTA gombot" time="0.073">
+    </testcase>
+    <testcase classname="SDSUploader Component PDF feltöltésekor elindul a folyamat és sikeresen befejeződik" name="SDSUploader Component PDF feltöltésekor elindul a folyamat és sikeresen befejeződik" time="10.002">
+      <failure>Error: thrown: &quot;Exceeded timeout of 10000 ms for a test.
+Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout.&quot;
+    at test (C:\Users\almas\Desktop\ChemRisk\chemrisk-mvp\__tests__\SDSUploader.test.tsx:55:3)
+    at _dispatchDescribe (C:\Users\almas\Desktop\ChemRisk\chemrisk-mvp\node_modules\jest-circus\build\jestAdapterInit.js:604:26)
+    at describe (C:\Users\almas\Desktop\ChemRisk\chemrisk-mvp\node_modules\jest-circus\build\jestAdapterInit.js:572:44)
+    at Object.describe (C:\Users\almas\Desktop\ChemRisk\chemrisk-mvp\__tests__\SDSUploader.test.tsx:39:1)
+    at Runtime._execModule (C:\Users\almas\Desktop\ChemRisk\chemrisk-mvp\node_modules\jest-runtime\build\index.js:1268:24)
+    at Runtime._loadModule (C:\Users\almas\Desktop\ChemRisk\chemrisk-mvp\node_modules\jest-runtime\build\index.js:944:12)
+    at Runtime.requireModule (C:\Users\almas\Desktop\ChemRisk\chemrisk-mvp\node_modules\jest-runtime\build\index.js:832:12)
+    at jestAdapter (C:\Users\almas\Desktop\ChemRisk\chemrisk-mvp\node_modules\jest-circus\build\runner.js:95:13)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at runTestInternal (C:\Users\almas\Desktop\ChemRisk\chemrisk-mvp\node_modules\jest-runner\build\testWorker.js:275:16)
+    at runTest (C:\Users\almas\Desktop\ChemRisk\chemrisk-mvp\node_modules\jest-runner\build\testWorker.js:343:7)
+    at Object.worker (C:\Users\almas\Desktop\ChemRisk\chemrisk-mvp\node_modules\jest-runner\build\testWorker.js:497:12)</failure>
+    </testcase>
+    <testcase classname="SDSUploader Component Hibaüzenetet dob nem PDF fájl esetén" name="SDSUploader Component Hibaüzenetet dob nem PDF fájl esetén" time="0.01">
     </testcase>
     <testcase classname="SDSUploader Component Hibaüzenetet dob 20MB-nál nagyobb fájl esetén" name="SDSUploader Component Hibaüzenetet dob 20MB-nál nagyobb fájl esetén" time="0.006">
     </testcase>
-    <testcase classname="SDSUploader Component Hiba után az Újra gomb visszaállítja az alapállapotot" name="SDSUploader Component Hiba után az Újra gomb visszaállítja az alapállapotot" time="0.012">
-    </testcase>
-  </testsuite>
-  <testsuite name="Results Page" errors="0" failures="0" skipped="0" timestamp="2026-05-10T12:17:41" time="1.261" tests="1">
-    <testcase classname="Results Page Rendereli a kinyert adatokat" name="Results Page Rendereli a kinyert adatokat" time="0.05">
+    <testcase classname="SDSUploader Component Hiba után az Újra gomb visszaállítja az alapállapotot" name="SDSUploader Component Hiba után az Újra gomb visszaállítja az alapállapotot" time="0.009">
     </testcase>
   </testsuite>
 </testsuites>
