@@ -4,6 +4,17 @@
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import ResultsClient from "../app/results/ResultsClient";
+import * as XLSX from "xlsx";
+
+// Mock the xlsx library
+jest.mock("xlsx", () => ({
+  utils: {
+    json_to_sheet: jest.fn(),
+    book_new: jest.fn(() => ({})),
+    book_append_sheet: jest.fn(),
+  },
+  writeFile: jest.fn(),
+}));
 
 describe("ResultsClient Component", () => {
   const mockData = {
@@ -14,25 +25,21 @@ describe("ResultsClient Component", () => {
     pStatements: ["P100: Test precaution"],
   };
 
-  test("Rendereli az export gombot", () => {
-    render(<ResultsClient data={mockData} />);
-    expect(screen.getByText("Exportálás CSV-be")).toBeInTheDocument();
+  beforeEach(() => {
+    jest.clearAllMocks();
   });
 
-  test("URL object lifecycle a CSV letöltésnél", () => {
-    const createObjectURLMock = jest.fn();
-    const revokeObjectURLMock = jest.fn();
+  test("Rendereli az export gombot", () => {
+    render(<ResultsClient data={mockData} />);
+    expect(screen.getByText("Exportálás Excel-be")).toBeInTheDocument();
+  });
 
-    // Mock global URL
-    global.URL.createObjectURL = createObjectURLMock;
-    global.URL.revokeObjectURL = revokeObjectURLMock;
-
+  test("Meghívja a writeFileXLSX függvényt a gombnyomásra", () => {
     render(<ResultsClient data={mockData} />);
     
-    const button = screen.getByText("Exportálás CSV-be");
+    const button = screen.getByText("Exportálás Excel-be");
     fireEvent.click(button);
 
-    expect(createObjectURLMock).toHaveBeenCalled();
-    expect(revokeObjectURLMock).toHaveBeenCalled();
+    expect(XLSX.writeFile).toHaveBeenCalled();
   });
 });

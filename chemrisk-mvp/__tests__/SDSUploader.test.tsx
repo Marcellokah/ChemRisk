@@ -17,6 +17,14 @@ jest.mock("next/navigation", () => ({
   },
 }));
 
+// Mock global fetch
+global.fetch = jest.fn(() =>
+  Promise.resolve({
+    ok: true,
+    json: () => Promise.resolve({ data: {} }),
+  })
+) as jest.Mock;
+
 describe("SDSUploader Component", () => {
   // 1. Üres állapot teszt (US-01/AC1)
   test("Rendereli az üres állapotot és a CTA gombot", () => {
@@ -41,18 +49,12 @@ describe("SDSUploader Component", () => {
     expect(input).not.toBeNull();
 
     // Fájl kiválasztás szimulálása
-    fireEvent.change(input!, { target: { files: [file] } });
-
-    // Ellenőrizzük, hogy megjelent-e a feldolgozás állapot
-    expect(screen.getByText(/Feldolgozás alatt/i)).toBeInTheDocument();
-
-    // Idő pörgetése előre a setInterval miatt (3 mp)
-    act(() => {
-      jest.advanceTimersByTime(3500);
+    await act(async () => {
+      fireEvent.change(input!, { target: { files: [file] } });
     });
 
-    // Siker állapot ellenőrzése
-    expect(screen.getByText(/Feldolgozás sikeres/i)).toBeInTheDocument();
+    // Mivel a fetch mock azonnal feloldódik, egyből a siker állapothoz jutunk
+    expect(await screen.findByText(/Feldolgozás sikeres/i)).toBeInTheDocument();
     expect(screen.getByText(/Eredmények megtekintése/i)).toBeInTheDocument();
   });
 

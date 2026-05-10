@@ -1,11 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="jest tests" tests="5" failures="0" errors="0" time="1.73">
-  <testsuite name="SDSUploader Component" errors="0" failures="0" skipped="0" timestamp="2026-05-10T09:49:09" time="1.201" tests="5">
-    <testcase classname="SDSUploader Component Rendereli az üres állapotot és a CTA gombot" name="SDSUploader Component Rendereli az üres állapotot és a CTA gombot" time="0.053">
+<testsuites name="jest tests" tests="8" failures="0" errors="0" time="2.014">
+  <testsuite name="ResultsClient Component" errors="0" failures="0" skipped="0" timestamp="2026-05-10T10:42:10" time="0.582" tests="2">
+    <testcase classname="ResultsClient Component Rendereli az export gombot" name="ResultsClient Component Rendereli az export gombot" time="0.038">
     </testcase>
-    <testcase classname="SDSUploader Component PDF feltöltésekor elindul a folyamat és sikeresen befejeződik" name="SDSUploader Component PDF feltöltésekor elindul a folyamat és sikeresen befejeződik" time="0.022">
+    <testcase classname="ResultsClient Component Meghívja a writeFileXLSX függvényt a gombnyomásra" name="ResultsClient Component Meghívja a writeFileXLSX függvényt a gombnyomásra" time="0.008">
     </testcase>
-    <testcase classname="SDSUploader Component Hibaüzenetet dob nem PDF fájl esetén" name="SDSUploader Component Hibaüzenetet dob nem PDF fájl esetén" time="0.007">
+  </testsuite>
+  <testsuite name="Results Page" errors="0" failures="0" skipped="0" timestamp="2026-05-10T10:42:10" time="0.737" tests="1">
+    <testcase classname="Results Page Rendereli a kinyert adatokat" name="Results Page Rendereli a kinyert adatokat" time="0.07">
+    </testcase>
+  </testsuite>
+  <testsuite name="SDSUploader Component" errors="0" failures="0" skipped="0" timestamp="2026-05-10T10:42:10" time="1.106" tests="5">
+    <testcase classname="SDSUploader Component Rendereli az üres állapotot és a CTA gombot" name="SDSUploader Component Rendereli az üres állapotot és a CTA gombot" time="0.037">
+    </testcase>
+    <testcase classname="SDSUploader Component PDF feltöltésekor elindul a folyamat és sikeresen befejeződik" name="SDSUploader Component PDF feltöltésekor elindul a folyamat és sikeresen befejeződik" time="0.019">
+    </testcase>
+    <testcase classname="SDSUploader Component Hibaüzenetet dob nem PDF fájl esetén" name="SDSUploader Component Hibaüzenetet dob nem PDF fájl esetén" time="0.006">
     </testcase>
     <testcase classname="SDSUploader Component Hibaüzenetet dob 20MB-nál nagyobb fájl esetén" name="SDSUploader Component Hibaüzenetet dob 20MB-nál nagyobb fájl esetén" time="0.005">
     </testcase>

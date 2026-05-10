@@ -1,11 +1,13 @@
-import React from "react";
+"use client";
+
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import ResultsClient from "./ResultsClient";
 import { ExtractedData } from "../types";
 
-// Mock data to simulate the extracted content
-const mockData: ExtractedData = {
-  productName: "Acetone Extra Pure",
+// Mock data to simulate the extracted content (fallback)
+const fallbackData: ExtractedData = {
+  productName: "Acetone Extra Pure (Fallback)",
   ingredients: [
     { name: "Acetone", casNumber: "67-64-1", concentration: "99-100%" },
   ],
@@ -28,6 +30,29 @@ const mockData: ExtractedData = {
 };
 
 export default function ResultsPage() {
+  const [data, setData] = useState<ExtractedData | null>(null);
+
+  useEffect(() => {
+    const stored = sessionStorage.getItem("extractedData");
+    if (stored) {
+      try {
+        setData(JSON.parse(stored));
+      } catch (e) {
+        setData(fallbackData);
+      }
+    } else {
+      setData(fallbackData);
+    }
+  }, []);
+
+  if (!data) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-slate-50 text-slate-900">
+        <p>Adatok betöltése...</p>
+      </div>
+    );
+  }
+
   return (
     <main className="min-h-screen bg-slate-50 text-slate-900 font-sans">
       {/* Header */}
@@ -64,14 +89,14 @@ export default function ResultsPage() {
               Ellenőrizze az automatikusan felismert adatokat a dokumentumból.
             </p>
           </div>
-          <ResultsClient data={mockData} />
+          <ResultsClient data={data} />
         </div>
 
         <div className="bg-white border border-slate-200 rounded-xl p-8 shadow-sm">
           {/* Terméknév */}
           <div className="mb-8">
             <h2 className="text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">Terméknév</h2>
-            <p className="text-xl font-semibold">{mockData.productName}</p>
+            <p className="text-xl font-semibold">{data.productName}</p>
           </div>
 
           {/* Összetevők */}
@@ -87,7 +112,7 @@ export default function ResultsPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  {mockData.ingredients.map((ing, idx) => (
+                  {data.ingredients.map((ing, idx) => (
                     <tr key={idx} className="border-b border-slate-100 last:border-0 hover:bg-slate-50">
                       <td className="py-3 px-4">{ing.name}</td>
                       <td className="py-3 px-4 font-mono">{ing.casNumber}</td>
@@ -105,7 +130,7 @@ export default function ResultsPage() {
               <div className="mb-6">
                 <h2 className="text-sm font-bold text-slate-500 uppercase tracking-wider mb-3">Veszélyességi osztályok</h2>
                 <ul className="list-disc list-inside space-y-1 text-slate-700">
-                  {mockData.hazardClasses.map((hc, idx) => (
+                  {data.hazardClasses.map((hc, idx) => (
                     <li key={idx}>{hc}</li>
                   ))}
                 </ul>
@@ -113,7 +138,7 @@ export default function ResultsPage() {
               <div>
                 <h2 className="text-sm font-bold text-slate-500 uppercase tracking-wider mb-3">H-mondatok (Veszély)</h2>
                 <ul className="space-y-2">
-                  {mockData.hStatements.map((h, idx) => {
+                  {data.hStatements.map((h, idx) => {
                     const [code, ...rest] = h.split(":");
                     return (
                       <li key={idx} className="flex gap-2">
@@ -130,7 +155,7 @@ export default function ResultsPage() {
             <div>
               <h2 className="text-sm font-bold text-slate-500 uppercase tracking-wider mb-3">P-mondatok (Óvintézkedés)</h2>
               <ul className="space-y-2">
-                {mockData.pStatements.map((p, idx) => {
+                {data.pStatements.map((p, idx) => {
                   const [code, ...rest] = p.split(":");
                   return (
                     <li key={idx} className="flex gap-2">

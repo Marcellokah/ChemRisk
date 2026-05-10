@@ -17,7 +17,7 @@ describe("Results Page", () => {
     render(<ResultsPage />);
 
     // Terméknév
-    expect(screen.getByText("Acetone Extra Pure")).toBeInTheDocument();
+    expect(screen.getByText("Acetone Extra Pure (Fallback)")).toBeInTheDocument();
     
     // Összetevő (Acetone, CAS: 67-64-1)
     expect(screen.getByText("Acetone")).toBeInTheDocument();
