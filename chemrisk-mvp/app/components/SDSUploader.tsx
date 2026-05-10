@@ -82,6 +82,25 @@ export default function SDSUploader() {
       // Save data for the results page (Array of ExtractedData)
       sessionStorage.setItem("extractedData", JSON.stringify(results));
 
+      // Save each file to the persistent file database
+      try {
+        for (const result of results) {
+          await fetch("/api/files", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              fileName: result.fileName,
+              data: result,
+            }),
+          });
+        }
+      } catch (err) {
+        console.warn("Fájlok mentése sikertelen:", err);
+        // Continue anyway - files were processed successfully
+      }
+
       setState((prev) => ({ ...prev, progress: 100, status: "SUCCESS" }));
     } catch (err: any) {
       clearInterval(interval);

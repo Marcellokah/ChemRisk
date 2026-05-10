@@ -1,25 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="jest tests" tests="8" failures="0" errors="0" time="1.976">
-  <testsuite name="ResultsClient Component" errors="0" failures="0" skipped="0" timestamp="2026-05-10T11:01:58" time="0.559" tests="2">
-    <testcase classname="ResultsClient Component Rendereli az export gombot" name="ResultsClient Component Rendereli az export gombot" time="0.036">
+<testsuites name="jest tests" tests="12" failures="0" errors="0" time="2.21">
+  <testsuite name="ResultsClient Component" errors="0" failures="0" skipped="0" timestamp="2026-05-10T12:17:41" time="0.582" tests="2">
+    <testcase classname="ResultsClient Component Rendereli az export gombot" name="ResultsClient Component Rendereli az export gombot" time="0.034">
     </testcase>
     <testcase classname="ResultsClient Component Meghívja a writeFileXLSX függvényt a gombnyomásra" name="ResultsClient Component Meghívja a writeFileXLSX függvényt a gombnyomásra" time="0.008">
     </testcase>
   </testsuite>
-  <testsuite name="Results Page" errors="0" failures="0" skipped="0" timestamp="2026-05-10T11:01:58" time="0.69" tests="1">
-    <testcase classname="Results Page Rendereli a kinyert adatokat" name="Results Page Rendereli a kinyert adatokat" time="0.054">
+  <testsuite name="FilesClient Component" errors="0" failures="0" skipped="0" timestamp="2026-05-10T12:17:41" time="0.674" tests="4">
+    <testcase classname="FilesClient Component renders empty state when no files" name="FilesClient Component renders empty state when no files" time="0.04">
+    </testcase>
+    <testcase classname="FilesClient Component renders file list when files are provided" name="FilesClient Component renders file list when files are provided" time="0.023">
+    </testcase>
+    <testcase classname="FilesClient Component expands file details when clicked" name="FilesClient Component expands file details when clicked" time="0.02">
+    </testcase>
+    <testcase classname="FilesClient Component shows ingredients information" name="FilesClient Component shows ingredients information" time="0.018">
     </testcase>
   </testsuite>
-  <testsuite name="SDSUploader Component" errors="0" failures="0" skipped="0" timestamp="2026-05-10T11:01:58" time="1.04" tests="5">
-    <testcase classname="SDSUploader Component Rendereli az üres állapotot és a CTA gombot" name="SDSUploader Component Rendereli az üres állapotot és a CTA gombot" time="0.032">
+  <testsuite name="SDSUploader Component" errors="0" failures="0" skipped="0" timestamp="2026-05-10T12:17:41" time="1.193" tests="5">
+    <testcase classname="SDSUploader Component Rendereli az üres állapotot és a CTA gombot" name="SDSUploader Component Rendereli az üres állapotot és a CTA gombot" time="0.034">
     </testcase>
-    <testcase classname="SDSUploader Component PDF feltöltésekor elindul a folyamat és sikeresen befejeződik" name="SDSUploader Component PDF feltöltésekor elindul a folyamat és sikeresen befejeződik" time="0.018">
+    <testcase classname="SDSUploader Component PDF feltöltésekor elindul a folyamat és sikeresen befejeződik" name="SDSUploader Component PDF feltöltésekor elindul a folyamat és sikeresen befejeződik" time="0.019">
     </testcase>
     <testcase classname="SDSUploader Component Hibaüzenetet dob nem PDF fájl esetén" name="SDSUploader Component Hibaüzenetet dob nem PDF fájl esetén" time="0.006">
     </testcase>
-    <testcase classname="SDSUploader Component Hibaüzenetet dob 20MB-nál nagyobb fájl esetén" name="SDSUploader Component Hibaüzenetet dob 20MB-nál nagyobb fájl esetén" time="0.004">
+    <testcase classname="SDSUploader Component Hibaüzenetet dob 20MB-nál nagyobb fájl esetén" name="SDSUploader Component Hibaüzenetet dob 20MB-nál nagyobb fájl esetén" time="0.006">
     </testcase>
-    <testcase classname="SDSUploader Component Hiba után az Újra gomb visszaállítja az alapállapotot" name="SDSUploader Component Hiba után az Újra gomb visszaállítja az alapállapotot" time="0.007">
+    <testcase classname="SDSUploader Component Hiba után az Újra gomb visszaállítja az alapállapotot" name="SDSUploader Component Hiba után az Újra gomb visszaállítja az alapállapotot" time="0.012">
+    </testcase>
+  </testsuite>
+  <testsuite name="Results Page" errors="0" failures="0" skipped="0" timestamp="2026-05-10T12:17:41" time="1.261" tests="1">
+    <testcase classname="Results Page Rendereli a kinyert adatokat" name="Results Page Rendereli a kinyert adatokat" time="0.05">
     </testcase>
   </testsuite>
 </testsuites>

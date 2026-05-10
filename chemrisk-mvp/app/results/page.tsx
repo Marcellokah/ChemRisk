@@ -74,7 +74,7 @@ export default function ResultsPage() {
             <span className="text-xl font-bold tracking-tight">ChemRisk</span>
           </div>
           <nav className="hidden md:flex space-x-6 text-sm font-medium text-slate-600">
-            <Link href="/" className="hover:text-blue-600 my-auto">
+            <Link href="/files" className="hover:text-blue-600 my-auto">
               Dokumentumok kezelése
             </Link>
             <Link href="/" className="text-blue-600 bg-blue-50 px-3 py-1 rounded-md">
