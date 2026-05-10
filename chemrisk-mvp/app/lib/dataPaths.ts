@@ -1,7 +1,11 @@
 import * as path from "path";
 
+const defaultDataDir = process.env.VERCEL
+  ? "/tmp/chemrisk-data"
+  : path.join(process.cwd(), "data");
+
 export const DATA_DIR = path.resolve(
-  process.env.CHEMRISK_DATA_DIR ?? path.join(process.cwd(), "data")
+  process.env.CHEMRISK_DATA_DIR ?? defaultDataDir
 );
 
 export const USERS_FILE = path.join(DATA_DIR, "users.json");
