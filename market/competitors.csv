@@ -1,0 +1,4 @@
+name,url,pricing_model,key_strengths,key_weaknesses
+Sphera (Enablon),https://www.sphera.com,enterprise,"Teljeskörű EHS/Compliance modulok;Erős audit és riporting;Skálázhatóság","Magas költség;Komplex bevezetés;Nem kifejezetten SDS-kinyerésre optimalizált"
+Chemwatch,https://www.chemwatch.net,subscription,"Specifikus SDS- és veszélykezelő funkcionalitás;Kiterjedt szabályozási adatbázis","Licenc- és integrációs költségek;Rugalmatlanabb felhasználói felület kisebb szervezetek számára"
+NicheSDS.ai,https://www.nichesds.example,saas,"Gyors automatizált SDS-kinyerés;API-first és könnyű integráció","Kevesebb vállalati bizalom/pozíció;Korlátozott kiegészítő funkcionalitás (pl. audit)"

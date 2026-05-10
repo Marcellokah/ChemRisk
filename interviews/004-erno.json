@@ -1,0 +1,23 @@
+{
+  "id": "INT-004",
+  "date": "2025-10-07",
+  "method": "online",
+  "participant": {
+    "pseudonym": "Ernő",
+    "segment": "Munkavédelemben dolgozó adminisztrátor"
+  },
+  "consent": true,
+  "insights": [
+    "A munkavédelem adminisztrációjában gyakran kell több SDS-et összevetnie és összehasonlítania.",
+    "Gyakran problémát jelent a verziókövetés és az auditálhatóság hiánya.",
+    "Szeretne egy egyszerű módot arra, hogy hibákat és eltéréseket gyorsan kiszűrjön." 
+  ],
+  "pain_points": [
+    "Nehezen nyomon követhető, mikor melyik SDS frissült utoljára.",
+    "A manuális adatbevitel és ellenőrzés időigényes és hibaforrást jelent.",
+    "Nincs centralizált eszköz, amely összehasonlító riportot készít különböző forrásokból." 
+  ],
+  "quotes": [
+    "\"Amikor több beszállító adatlapja eltér, percek helyett órák mennek el az összehasonlítással.\""
+  ]
+}

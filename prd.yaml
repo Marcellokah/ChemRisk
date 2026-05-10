@@ -1,0 +1,57 @@
+meta:
+  version: "0.1"
+  last_updated: "2025-10-16"
+problem:
+  statement: "Magyarországon a munkavédelemben használt veszélyes vegyi anyagok kémiai kockázatelemzéséhez szükséges adatgyűjtés jelenleg kézi, időigényes és monoton folyamat, ami növeli a hibák kockázatát és lassítja a döntéshozatalt."
+target_audience:
+  personas:
+    - name: "Anna, EHS specialista"
+      segment: "EHS specialista, aki a kémiai kockázatelemzést készíti."
+      needs:
+        - "Gyors és megbízható adatgyűjtés a kockázatelemzéshez"
+        - "Könnyen exportálható expozíciós mátrix és jelentés"
+    - name: "Bence, vegyi labor felelős"
+      segment: "Vegyi labor felelős, aki a biztonsági adatlapokat kezeli."
+      needs:
+        - "Hatékony anyagnyilvántartás és biztonsági adatlapok kezelése"
+        - "Csökkentett manuális munkamennyiség és hibalehetőség"
+value_proposition:
+  concise: "ChemRisk automatikusan strukturálja a biztonsági adatlapokból kinyert adatokat, gyorsítva a kémiai kockázatelemzés előkészítését és csökkentve a hibák számát."
+  differentiators:
+    - "Automatikus adatkinyerés több oldalas PDF-ekből"
+    - "Gyors, szabványosított kimenetek (CAS számok, H- és P-mondatok, összetevők, veszélyességi osztályok)"
+    - "Exportálható táblázatok és expozíciós mátrixok a kockázatelemzéshez"
+scope:
+  in:
+    - "Egyedi biztonsági adatlap (PDF) feltöltése és validálása."
+    - "Szöveges adatkinyerés (OCR/NLP) a dokumentumból: Terméknév, Összetevők listája, CAS számok, Veszélyességi osztályok, H- és P-mondatok."
+    - "A kinyert adatok strukturált megjelenítése egy ellenőrző nézetben (Web UI)."
+    - Az ellenőrzött adatok letöltése CSV vagy Excel formátumban (további elemzéshez).
+  out:
+    - "Tömeges feltöltés (Bulk upload)."
+    - "Képjavító algoritmusok (rossz minőségű szkennelt dokumentumokhoz)."
+    - "Felhasználókezelés és jogosultsági szintek (Admin/User)."
+    - "Beépített jogi tanácsadás vagy teljes expozíciós mátrix generálás a felületen belül."
+success_metrics:
+  - "≥5 korai tesztelő aktívan használja a rendszert az első 3 hónapban."
+  - "A tesztelők átlagos elégedettsége ≥4/5 az onboarding után."
+  - "A feldolgozási idő átlagosan 30%-kal csökken a manuális folyamathoz képest."
+risks:
+  - "Az EU tagállamainak eltérő jogszabályi keretei és értelmezése – nemzetközi megfelelés nehézségei."
+  - "Jogszabályi és szabályozási változások gyors üteme, amelyek folyamatos követést és rendszeres frissítést igényelnek."
+  - "Adatvédelmi és személyes adatok kezelése (GDPR) – a személyes vagy érzékeny adatok nem megfelelő kezelése jogi következményekkel járhat."
+  - "Forrásdokumentumok gyenge minősége és OCR-pontatlanságok, amelyek csökkentik a kinyert adatok megbízhatóságát."
+  - "Harmadik felektől (OCR motorok, vegyianyag-adatbázisok) való függőség: szolgáltatáskimaradás, ár- vagy licencváltozás hatása a működésre."
+  - "Felelősség- és jogi kockázat a rendszer által előállított adatokra alapozott döntésekért — emberi felülvizsgálat szükségessége."
+  - "Multinyelvűség és formátumi eltérések a biztonsági adatlapokban, amelyek további lokalizációs és normalizációs erőforrást igényelnek."
+  - "Skálázhatósági és teljesítmény-kockázatok nagy volumenű dokumentumfeldolgozás esetén."
+first_tech_decision_ref: "sprints/01/architecture/adr/0001-first-tech-choice.md"
+research_summary:
+  insights:
+    - "A kémiai kockázatelemzéshez szükséges adatgyűjtés jelenleg kézi és időigényes folyamat, amely növeli a hibák kockázatát."
+    - "A biztonsági adatlapok feldolgozása gyakran több száz dokumentumot igényel, ami jelentős idő- és erőforrás-ráfordítást jelent."
+    - "A célcsoport számára fontos a gyors és megbízható adatgyűjtés, valamint az exportálható kimenetek."
+  pain_points:
+    - "Manuális adatgyűjtés és feldolgozás időigényes és hibalehetőségekkel teli."
+    - "A biztonsági adatlapok formátuma és minősége változó, ami megnehezíti az automatikus feldolgozást."
+    - "A jogszabályi környezet folyamatosan változik, ami további kihívásokat jelent a megfelelés biztosításában."

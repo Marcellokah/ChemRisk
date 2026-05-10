@@ -1,0 +1,23 @@
+{
+  "id": "INT-003",
+  "date": "2025-10-07",
+  "method": "online",
+  "participant": {
+    "pseudonym": "Dorka",
+    "segment": "EHS gyakorló / adminisztrátor"
+  },
+  "consent": true,
+  "insights": [
+    "Sok időt fordít az SDS-ekben található releváns információk (összetevők, koncentrációk) kigyűjtésére és egységesítésére.",
+    "Sokszor kézzel kell normalizálni a megnevezéseket és ellenőrizni a CAS számokat.",
+    "Szeretne egy egyszerű felületet, ahol gyorsan lehet keresni és exportálni szabványosított riportokat." 
+  ],
+  "pain_points": [
+    "A különböző SDS-formátumok miatt sok a manuális adatjavítás.",
+    "Nincs hatékony mód a tömeges export/összegzés előállítására.",
+    "A jelenlegi eszközök túl technikaiak a célfelhasználók egy részének." 
+  ],
+  "quotes": [
+    "\"Ha egy kattintással kapnám meg a kinyert adatokat standard formátumban, az nagyban egyszerűsítené a munkám.\""
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "id": "INT-001",
+  "date": "2025-10-05",
+  "method": "online",
+  "participant": {
+    "pseudonym": "Anna",
+    "segment": "EHS specialista"
+  },
+  "consent": true,
+  "insights": [
+    "Jelenleg biztonsági adatlapokat PDF formátumban gyűjt, és kézzel másolja át az adatokat táblázatokba.",
+    "A különböző források formátumbeli eltérései miatt sok idő megy el az adatstandardizálásra.",
+    "Szüksége lenne gyors, megbízható kinyerésre (CAS, H-mondatok, összetevők), hogy a kockázatelemzéshez használható expozíciós mátrixot tudjon előállítani."
+  ],
+  "pain_points": [
+    "Több órát vesz igénybe egy új anyag adatainak összegyűjtése és ellenőrzése.",
+    "Gyakran hiányoznak szabványosított mezők vagy eltérő megnevezések több SDS-ben.",
+    "A manuális javítás és verziókövetés nehézkes, nincs konzisztens auditálás."
+  ],
+  "quotes": [
+    "\"Ha lenne egy eszköz, ami automatikusan kinyerné a CAS-számokat és a H-mondatokat, rengeteg időt spórolnék.\""
+  ]
+}

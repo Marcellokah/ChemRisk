@@ -1,0 +1,8 @@
+# scripts/smoke.yaml
+base_url: http://localhost:3000
+steps:
+  - name: "Health Check - Homepage"
+    method: GET
+    path: "/"
+    expect_status: 200
+    expect_body_contains: "ChemRisk"

@@ -1,0 +1,18 @@
+# scripts/smoke.http
+
+# 1. Teszt: Főoldal elérhetősége (Smoke Test)
+# Cél: Meggyőződni arról, hogy a szerver elindult és HTML-t ad vissza.
+GET http://localhost:3000/
+Accept: text/html
+
+###
+# Várt eredmény:
+# HTTP/1.1 200 OK
+# Content-Type: text/html; ...
+
+# 2. Teszt (Opcionalis): Statikus asset ellenőrzése
+# Cél: Biztosítani, hogy a buildelt JS/CSS fájlok elérhetőek (nem 404).
+GET http://localhost:3000/favicon.ico
+
+###
+# Várt eredmény: 200 OK

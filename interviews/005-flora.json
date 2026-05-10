@@ -1,0 +1,23 @@
+{
+  "id": "INT-005",
+  "date": "2025-10-08",
+  "method": "in_person",
+  "participant": {
+    "pseudonym": "Flóra",
+    "segment": "EHS menedzser / pilot felhasználó"
+  },
+  "consent": true,
+  "insights": [
+    "Használ Notion-t és más eszközöket, de hiányzik egy dedikált SDS-feldolgozó pipeline integrációja.",
+    "Szüksége van konzulensi státuszriportokra és auditálható változásnaplóra.",
+    "Értékesnek tartja az automatizált figyelmeztetéseket a hiányzó vagy ellentmondó adatokra." 
+  ],
+  "pain_points": [
+    "A megosztott dokumentumokban gyakran eltűnnek a kommentek és a kontextus.",
+    "Hiányzik az automatikus ellenőrzés a szabványos mezők (CAS, H-mondat) meglétére és helyességére.",
+    "Nehézséget okoz a konzisztens státuszjelentések előállítása a vezetés számára." 
+  ],
+  "quotes": [
+    "\"Egy rendszeren belüli, auditálható workflow nagyban segítené a riportolást és a megfelelőséget.\""
+  ]
+}

@@ -1,0 +1,9 @@
+student:
+  name: "Almási Marcell"
+  neptun: "KNEUVG"
+  id: "Marcellokah"
+project:
+  title: "ChemRisk - Kémiai kockázatelemzés automatizálása biztonsági adatlapok feldolgozásával"
+  product_ml_features: true
+ai:
+  log_min_entries_per_sprint: 3

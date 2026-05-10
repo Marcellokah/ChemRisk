@@ -1,0 +1,23 @@
+{
+  "id": "INT-002",
+  "date": "2025-10-06",
+  "method": "in_person",
+  "participant": {
+    "pseudonym": "Bence",
+    "segment": "Vegyi labor felelős"
+  },
+  "consent": true,
+  "insights": [
+    "A labor több beszállítótól kap SDS-eket, amelyek formátuma jelentősen eltér; emiatt nehéz automatikusan feldolgozni őket.",
+    "A jelenlegi nyilvántartó rendszer nem kezeli jól a tömeges feltöltést és az auditálhatóságot.",
+    "Fontos számára, hogy a rendszer támogassa a jogszabályi megfelelőséget és a gyors keresést." 
+  ],
+  "pain_points": [
+    "Új anyag bevezetésekor minden adatot kézzel kell felvinni és ellenőrizni.",
+    "Nincs egyszerű mód a CAS számok és H-mondatok tömeges ellenőrzésére és normalizálására.",
+    "A manuális folyamat lassú, és előforduló emberi hibák nehezen nyomon követhetők." 
+  ],
+  "quotes": [
+    "\"Egy automatizált feldolgozó pipeline jelentősen csökkentené az adminisztrációs terheket és a hibákat.\""
+  ]
+}
