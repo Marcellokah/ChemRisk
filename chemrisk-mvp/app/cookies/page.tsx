@@ -18,7 +18,7 @@ export default function CookiesPage() {
             &larr; Vissza
           </Link>
 
-          <div className="app-kicker mb-4">Jogi információ</div>
+          <div className="app-kicker mb-4 ms-2">Jogi információ</div>
           <h1 className="app-heading text-4xl font-semibold tracking-tight text-[color:var(--foreground)]">
             Cookie-k és követés
           </h1>
