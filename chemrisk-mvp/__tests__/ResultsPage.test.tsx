@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  */
 import React from "react";
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import ResultsPage from "../app/results/page";
 import { AuthProvider } from "../app/context/AuthContext";
 
@@ -22,36 +22,36 @@ jest.mock("next/navigation", () => ({
   },
 }));
 
-// Mock global fetch
-jest.mock("node-fetch", () => ({
-  __esModule: true,
-  default: jest.fn(() =>
-    Promise.resolve({
-      ok: true,
-      json: () => Promise.resolve({ user: null }),
-    })
-  ),
-}));
+beforeEach(() => {
+  sessionStorage.clear();
+  window.matchMedia = window.matchMedia || (() => ({
+    matches: false,
+    media: "",
+    onchange: null,
+    addListener: jest.fn(),
+    removeListener: jest.fn(),
+    addEventListener: jest.fn(),
+    removeEventListener: jest.fn(),
+    dispatchEvent: jest.fn(),
+  })) as any;
+  global.fetch = jest.fn().mockResolvedValue({
+    ok: true,
+    json: () => Promise.resolve({ files: [] }),
+  }) as jest.Mock;
+});
 
 describe("Results Page", () => {
-  test("Rendereli a kinyert adatokat", () => {
+  test("üres állapotot mutat, ha nincs mentett eredmény", async () => {
     render(
       <AuthProvider>
         <ResultsPage />
       </AuthProvider>
     );
 
-    // Terméknév
-    expect(screen.getByText("Acetone Extra Pure (Fallback)")).toBeInTheDocument();
-    
-    // Összetevő (Acetone, CAS: 67-64-1)
-    expect(screen.getByText("Acetone")).toBeInTheDocument();
-    expect(screen.getByText("67-64-1")).toBeInTheDocument();
-
-    // H-mondat (H225)
-    expect(screen.getByText("H225:")).toBeInTheDocument();
-
-    // P-mondat (P210)
-    expect(screen.getByText("P210:")).toBeInTheDocument();
+    await waitFor(() => {
+      expect(
+        screen.getByText(/Még nincs megjeleníthető feldolgozás/i)
+      ).toBeInTheDocument();
+    });
   });
 });

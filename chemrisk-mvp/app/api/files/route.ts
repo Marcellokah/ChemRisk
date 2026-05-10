@@ -1,12 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import * as fs from "fs";
-import * as path from "path";
 import { ExtractedData } from "../../types";
+import { DATA_DIR, FILES_INDEX } from "../../lib/dataPaths";
 
 export const dynamic = "force-dynamic";
-
-const DATA_DIR = path.join(process.cwd(), "data");
-const FILES_INDEX = path.join(DATA_DIR, "files.json");
 
 // Ensure data directory exists
 function ensureDataDir() {

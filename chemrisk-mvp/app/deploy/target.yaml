@@ -15,4 +15,4 @@ iac:
   tool: "terraform"
   dir: "infra/terraform"
   plan_out: "infra/terraform/plan.out"
-notes: "Next.js App Router (ADR-0001). A Vercel deployhoz képest itt a helyi preview/konténeres futtatást definiáljuk."
+notes: "Next.js App Router (ADR-0001). Productionhoz a CHEMRISK_DATA_DIR-t egy tartósan csatolt volume-ra kell mutatni, különben a fájl-alapú auth és archívum adatok elveszhetnek újraindításkor."

@@ -1,10 +1,6 @@
 import * as fs from "fs";
-import * as path from "path";
 import * as crypto from "crypto";
-
-const DATA_DIR = path.join(process.cwd(), "data");
-const USERS_FILE = path.join(DATA_DIR, "users.json");
-const UPLOADS_FILE = path.join(DATA_DIR, "uploads.json");
+import { DATA_DIR, USERS_FILE, UPLOADS_FILE } from "./dataPaths";
 
 interface User {
   id: string;

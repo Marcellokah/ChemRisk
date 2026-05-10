@@ -6,60 +6,80 @@ import ResultsClient from "./ResultsClient";
 import Header from "../components/Header";
 import { ExtractedData } from "../types";
 
-// Mock data to simulate the extracted content (fallback)
-const fallbackData: ExtractedData[] = [
-  {
-    fileName: "fallback.pdf",
-    productName: "Acetone Extra Pure (Fallback)",
-    ingredients: [
-      { name: "Acetone", casNumber: "67-64-1", concentration: "99-100%" },
-    ],
-    hazardClasses: [
-      "Flam. Liq. 2",
-      "Eye Irrit. 2",
-      "STOT SE 3",
-    ],
-    hStatements: [
-      "H225: Highly flammable liquid and vapour.",
-      "H319: Causes serious eye irritation.",
-      "H336: May cause drowsiness or dizziness.",
-      "EUH066: Repeated exposure may cause skin dryness or cracking.",
-    ],
-    pStatements: [
-      "P210: Keep away from heat, hot surfaces, sparks, open flames and other ignition sources. No smoking.",
-      "P233: Keep container tightly closed.",
-      "P305+P351+P338: IF IN EYES: Rinse cautiously with water for several minutes. Remove contact lenses, if present and easy to do. Continue rinsing.",
-    ],
-  }
-];
-
 export default function ResultsPage() {
   const [dataList, setDataList] = useState<ExtractedData[] | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const stored = sessionStorage.getItem("extractedData");
-    if (stored) {
+    const loadResults = async () => {
       try {
-        const parsed = JSON.parse(stored);
-        if (Array.isArray(parsed)) {
-          setDataList(parsed);
-        } else {
-          // Backward compatibility for single upload
-          setDataList([parsed]);
+        const stored = sessionStorage.getItem("extractedData");
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          setDataList(Array.isArray(parsed) ? parsed : [parsed]);
+          return;
         }
-      } catch (e) {
-        setDataList(fallbackData);
+
+        const response = await fetch("/api/files");
+        if (!response.ok) {
+          throw new Error("Nem sikerült betölteni a mentett eredményeket.");
+        }
+
+        const payload = await response.json();
+        const files = Array.isArray(payload.files) ? payload.files : [];
+        const extracted = files
+          .map((file: { data?: ExtractedData }) => file.data)
+          .filter((fileData: ExtractedData | undefined): fileData is ExtractedData => Boolean(fileData));
+
+        setDataList(extracted);
+      } catch {
+        setDataList([]);
+      } finally {
+        setLoading(false);
       }
-    } else {
-      setDataList(fallbackData);
-    }
+    };
+
+    loadResults();
   }, []);
 
-  if (!dataList) {
+  if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-50 text-slate-900">
-        <p>Adatok betöltése...</p>
-      </div>
+      <main className="app-shell text-[color:var(--foreground)]">
+        <Header />
+        <section className="app-container app-section">
+          <div className="app-card p-10 text-center">
+            <p className="text-[color:var(--muted)]">Eredmények betöltése...</p>
+          </div>
+        </section>
+      </main>
+    );
+  }
+
+  if (!dataList || dataList.length === 0) {
+    return (
+      <main className="app-shell text-[color:var(--foreground)]">
+        <Header />
+
+        <section className="app-container app-section">
+          <div className="mx-auto max-w-2xl text-center">
+            <div className="app-kicker mb-4">Eredmények</div>
+            <h1 className="app-heading text-4xl font-semibold tracking-tight text-[color:var(--foreground)]">
+              Még nincs megjeleníthető feldolgozás
+            </h1>
+            <p className="mt-4 text-lg text-[color:var(--muted)]">
+              Tölts fel egy PDF biztonsági adatlapot, vagy nyisd meg a mentett archívumot, hogy itt megjelenjenek a kinyert adatok.
+            </p>
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">
+              <Link href="/upload" className="app-button-primary">
+                Feltöltés megnyitása
+              </Link>
+              <Link href="/files" className="app-button-secondary">
+                Archívum megnyitása
+              </Link>
+            </div>
+          </div>
+        </section>
+      </main>
     );
   }
 
