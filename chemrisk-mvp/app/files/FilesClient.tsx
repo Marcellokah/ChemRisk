@@ -56,7 +56,7 @@ export default function FilesClient({ files, onFilesChange }: FilesClientProps) 
       <div className="app-card-strong p-10 text-center">
         <p className="mb-4 text-[color:var(--muted)]">Még nincsenek feltöltött fájlok</p>
         <Link
-          href="/"
+          href="/upload"
           className="app-button-primary"
         >
           Első fájl feltöltése

@@ -41,8 +41,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (data.user) {
         setUser(data.user);
       }
-    } catch (error) {
-      console.error("Session check error:", error);
     } finally {
       setLoading(false);
     }
@@ -53,8 +51,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const res = await fetch("/api/auth/check-upload");
       const data = await res.json();
       setUploadLimit(data);
-    } catch (error) {
-      console.error("Upload check error:", error);
+    } catch {
+      // Keep the default limit state if the check is temporarily unavailable.
     }
   };
 

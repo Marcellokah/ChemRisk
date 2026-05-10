@@ -70,7 +70,7 @@ export default function ResultsPage() {
       <section className="app-container app-section">
         <div className="mb-8 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-3xl">
-            <Link href="/" className="mb-4 inline-flex items-center gap-2 text-sm font-medium text-[color:var(--accent-strong)] hover:underline">
+            <Link href="/upload" className="mb-4 inline-flex items-center gap-2 text-sm font-medium text-[color:var(--accent-strong)] hover:underline">
               &larr; Vissza a feltöltéshez
             </Link>
             <div className="app-kicker mb-4">Ellenőrzés</div>

@@ -32,7 +32,7 @@ export default function RegisterPage() {
 
     try {
       await register(email, password);
-      router.push("/");
+      router.push("/upload");
     } catch (err: any) {
       setError(err.message || "Regisztrációs hiba");
     } finally {

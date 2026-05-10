@@ -11,21 +11,26 @@ export default function Header() {
   const { user, logout } = useAuth();
   const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
-  const [theme, setTheme] = useState<ThemeMode>("light");
+  const [theme, setTheme] = useState<ThemeMode>(() => {
+    if (typeof window === "undefined") {
+      return "light";
+    }
+
+    const storedTheme = window.localStorage.getItem("chemrisk-theme");
+    if (storedTheme === "dark" || storedTheme === "light") {
+      return storedTheme;
+    }
+
+    return window.matchMedia("(prefers-color-scheme: dark)").matches
+      ? "dark"
+      : "light";
+  });
 
   useEffect(() => {
-    const storedTheme = window.localStorage.getItem("chemrisk-theme");
-    const initialTheme: ThemeMode =
-      storedTheme === "dark" || storedTheme === "light"
-        ? storedTheme
-        : window.matchMedia("(prefers-color-scheme: dark)").matches
-          ? "dark"
-          : "light";
-
-    setTheme(initialTheme);
-    document.documentElement.dataset.theme = initialTheme;
-    document.documentElement.style.colorScheme = initialTheme;
-  }, []);
+    document.documentElement.dataset.theme = theme;
+    document.documentElement.style.colorScheme = theme;
+    window.localStorage.setItem("chemrisk-theme", theme);
+  }, [theme]);
 
   const applyTheme = (nextTheme: ThemeMode) => {
     setTheme(nextTheme);
@@ -65,17 +70,11 @@ export default function Header() {
         </Link>
 
         <nav className="hidden md:flex items-center gap-2">
-          <Link
-            href="/files"
-            className={`${pillBase} ${pillDefault}`}
-          >
-            Dokumentumok
-          </Link>
-          <Link
-            href="/"
-            className={`${pillBase} ${pillPrimary}`}
-          >
+          <Link href="/upload" className={`${pillBase} ${pillDefault}`}>
             Feltöltés
+          </Link>
+          <Link href="/files" className={`${pillBase} ${pillDefault}`}>
+            Dokumentumok
           </Link>
         </nav>
 
@@ -83,23 +82,40 @@ export default function Header() {
           <button
             type="button"
             onClick={() => applyTheme(theme === "dark" ? "light" : "dark")}
-            className={`${pillBase} ${pillDefault} px-3`}
+            className={`${pillBase} ${pillDefault} h-11 w-11 px-0`}
             aria-label="Theme toggle"
+            title={theme === "dark" ? "Világos mód" : "Sötét mód"}
           >
             {theme === "dark" ? (
-              <>
-                <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M12 3v2m0 14v2m8.485-8.485-1.414 1.414M5.929 5.929 4.515 4.515m0 14.97 1.414-1.414M19.485 4.515l-1.414 1.414M21 12h-2M5 12H3m9 9a7 7 0 1 1 0-14 7 7 0 0 1 0 14Z" />
-                </svg>
-                <span className="hidden sm:inline">Világos</span>
-              </>
+              <svg
+                className="h-4 w-4"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                aria-hidden="true"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={1.8}
+                  d="M12 3v2m0 14v2m8.485-8.485-1.414 1.414M5.929 5.929 4.515 4.515m0 14.97 1.414-1.414M19.485 4.515l-1.414 1.414M21 12h-2M5 12H3m9 9a7 7 0 1 1 0-14 7 7 0 0 1 0 14Z"
+                />
+              </svg>
             ) : (
-              <>
-                <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M21 12.8A8.5 8.5 0 0 1 11.2 3a8.5 8.5 0 1 0 9.8 9.8Z" />
-                </svg>
-                <span className="hidden sm:inline">Sötét</span>
-              </>
+              <svg
+                className="h-4 w-4"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                aria-hidden="true"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={1.8}
+                  d="M21 12.8A8.5 8.5 0 0 1 11.2 3a8.5 8.5 0 1 0 9.8 9.8Z"
+                />
+              </svg>
             )}
           </button>
 
