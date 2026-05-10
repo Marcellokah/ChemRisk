@@ -207,19 +207,17 @@ export default function SDSUploader() {
           </button>
 
           {/* Upload limit indicator */}
-          {uploadLimit.limit !== Infinity && (
+          {!user && uploadLimit.limit !== Infinity && (
             <div className="mt-8 border-t border-[color:var(--border)] pt-6">
               <p className="mb-3 text-sm text-[color:var(--muted)]">
                 <span className="font-semibold text-[color:var(--foreground)]">{uploadLimit.remaining}/{uploadLimit.limit}</span> feltöltés marad ma
               </p>
-              {!user && (
-                <Link
-                  href="/register"
-                  className="app-button-secondary"
-                >
-                  Regisztrálj az unlimited feltöltéshez →
-                </Link>
-              )}
+              <Link
+                href="/register"
+                className="app-button-secondary"
+              >
+                Regisztrálj az unlimited feltöltéshez →
+              </Link>
             </div>
           )}
         </div>
