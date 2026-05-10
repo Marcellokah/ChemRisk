@@ -6,6 +6,15 @@ Rövid leírás
 - **Projekt:** ChemRisk MVP (kémiai biztonsági adatlapok automatikus feldolgozása)
 - **Branch:** `sprint2`
 
+Projektstruktúra
+
+- `chemrisk-mvp/` - Next.js alkalmazás, API route-ok és tesztek
+- `docs/spec/`, `docs/stories/`, `docs/process/`, `docs/adr/` - specifikáció, user story-k és döntési dokumentumok
+- `docs/research/interviews/`, `docs/research/market/` - kutatási anyagok és piackutatás
+- `docs/design/wireframes/` - drótvázak és UI referenciák
+- `tests/acceptance/` - acceptance feature fájlok
+- Root `reports/` nincs már szükségben; a CI/teszt riportok generált kimenetek
+
 Gyorsstart
 
 - Telepítés:
