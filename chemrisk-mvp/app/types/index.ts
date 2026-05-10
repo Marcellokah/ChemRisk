@@ -7,9 +7,16 @@ export interface UploadState {
   errorMessage?: string;
 }
 
-// Mock adat a későbbi backend válaszhoz
-export interface ExtractedDataPreview {
-  productName: string;
+export interface ExtractedIngredient {
+  name: string;
   casNumber: string;
-  hazardStatements: string[];
+  concentration: string;
+}
+
+export interface ExtractedData {
+  productName: string;
+  ingredients: ExtractedIngredient[];
+  hazardClasses: string[];
+  hStatements: string[];
+  pStatements: string[];
 }

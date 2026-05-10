@@ -1,10 +1,12 @@
 "use client";
 
 import React, { useState, useRef } from "react";
+import { useRouter } from "next/navigation";
 import { UploadState } from "../types";
 
 export default function SDSUploader() {
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const router = useRouter();
 
   // State initialization
   const [state, setState] = useState<UploadState>({
@@ -177,9 +179,7 @@ export default function SDSUploader() {
             <div className="flex justify-end">
               <button
                 className="flex items-center px-6 py-2 bg-slate-900 text-white rounded-lg hover:bg-slate-800 transition"
-                onClick={() =>
-                  alert("US-02: Tovább az adatok ellenőrzésére... (Sprint 3)")
-                }
+                onClick={() => router.push("/results")}
               >
                 Eredmények megtekintése →
               </button>

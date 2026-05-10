@@ -8,6 +8,15 @@ import SDSUploader from "../app/components/SDSUploader";
 // Időzítők mockolása a setInterval miatt (gyors, determinisztikus teszt)
 jest.useFakeTimers();
 
+// Mock next/navigation
+jest.mock("next/navigation", () => ({
+  useRouter() {
+    return {
+      push: jest.fn(),
+    };
+  },
+}));
+
 describe("SDSUploader Component", () => {
   // 1. Üres állapot teszt (US-01/AC1)
   test("Rendereli az üres állapotot és a CTA gombot", () => {
