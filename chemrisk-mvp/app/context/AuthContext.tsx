@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect, useMemo, useState, useCallback } from "react";
 
 interface User {
   id: string;
@@ -34,7 +34,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     checkSession();
   }, []);
 
-  const checkSession = async () => {
+  const checkSession = useCallback(async () => {
     try {
       const res = await fetch("/api/auth/session");
       const data = await res.json();
@@ -44,9 +44,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
-  const checkUpload = async () => {
+  const checkUpload = useCallback(async () => {
     try {
       const res = await fetch("/api/auth/check-upload");
       const data = await res.json();
@@ -54,9 +54,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     } catch {
       // Keep the default limit state if the check is temporarily unavailable.
     }
-  };
+  }, []);
 
-  const login = async (email: string, password: string) => {
+  const login = useCallback(async (email: string, password: string) => {
     const res = await fetch("/api/auth/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -71,9 +71,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const data = await res.json();
     setUser(data.user);
     await checkUpload();
-  };
+  }, [checkUpload]);
 
-  const register = async (email: string, password: string) => {
+  const register = useCallback(async (email: string, password: string) => {
     const res = await fetch("/api/auth/register", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -88,9 +88,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const data = await res.json();
     setUser(data.user);
     await checkUpload();
-  };
+  }, [checkUpload]);
 
-  const logout = async () => {
+  const logout = useCallback(async () => {
     await fetch("/api/auth/logout", { method: "POST" });
     setUser(null);
     setUploadLimit({
@@ -99,22 +99,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       limit: 5,
       isAuthenticated: false,
     });
-  };
+  }, []);
+
+  const value = useMemo(
+    () => ({
+      user,
+      loading,
+      login,
+      register,
+      logout,
+      uploadLimit,
+      checkUpload,
+    }),
+    [user, loading, login, register, logout, uploadLimit, checkUpload]
+  );
 
   return (
-    <AuthContext.Provider
-      value={{
-        user,
-        loading,
-        login,
-        register,
-        logout,
-        uploadLimit,
-        checkUpload,
-      }}
-    >
-      {children}
-    </AuthContext.Provider>
+    <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
   );
 }
 

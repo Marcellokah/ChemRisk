@@ -25,7 +25,7 @@ export default function UploadPage() {
 
           <SDSUploader />
 
-          <div className="mt-8 grid gap-3 sm:grid-cols-3">
+          <div className="mt-8 grid gap-3 md:grid-cols-3">
             <div className="app-card-soft p-4">
               <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[color:var(--muted)]">Formátum</p>
               <p className="mt-2 font-medium">PDF, max. 20MB</p>

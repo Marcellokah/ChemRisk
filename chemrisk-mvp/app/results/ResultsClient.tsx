@@ -96,7 +96,7 @@ export default function ResultsClient({ dataList }: ResultsClientProps) {
   return (
     <button
       onClick={handleExportExcel}
-      className="app-button-primary bg-gradient-to-r from-emerald-500 to-teal-600 shadow-emerald-500/20"
+      className="app-button-primary w-full bg-gradient-to-r from-emerald-500 to-teal-600 shadow-emerald-500/20 sm:w-auto"
     >
       <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />

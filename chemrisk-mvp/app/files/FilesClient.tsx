@@ -53,11 +53,11 @@ export default function FilesClient({ files, onFilesChange }: FilesClientProps) 
 
   if (files.length === 0) {
     return (
-      <div className="app-card-strong p-10 text-center">
+      <div className="app-card-strong p-6 text-center sm:p-10">
         <p className="mb-4 text-[color:var(--muted)]">Még nincsenek feltöltött fájlok</p>
         <Link
           href="/upload"
-          className="app-button-primary"
+          className="app-button-primary w-full sm:w-auto"
         >
           Első fájl feltöltése
         </Link>
@@ -74,13 +74,13 @@ export default function FilesClient({ files, onFilesChange }: FilesClientProps) 
         >
           {/* File Header */}
           <div
-            className="cursor-pointer px-6 py-4 transition-colors hover:bg-[color:var(--surface-soft)]"
+            className="cursor-pointer px-4 py-4 transition-colors hover:bg-[color:var(--surface-soft)] sm:px-6"
             onClick={() =>
               setExpandedId(expandedId === file.id ? null : file.id)
             }
           >
-            <div className="flex items-center justify-between">
-              <div className="flex-1">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-3">
                   <svg
                     className={`h-5 w-5 text-[color:var(--accent-strong)] transition-transform ${
@@ -97,17 +97,17 @@ export default function FilesClient({ files, onFilesChange }: FilesClientProps) 
                       d="M9 5l7 7-7 7"
                     />
                   </svg>
-                  <div>
+                  <div className="min-w-0">
                     <h3 className="font-semibold text-[color:var(--foreground)]">
-                      {file.fileName}
+                      <span className="block truncate">{file.fileName}</span>
                     </h3>
-                    <p className="text-sm text-[color:var(--muted)]">
+                    <p className="truncate text-sm text-[color:var(--muted)]">
                       {file.data.productName}
                     </p>
                   </div>
                 </div>
               </div>
-              <div className="text-right">
+              <div className="text-left sm:text-right">
                 <p className="text-sm text-[color:var(--muted)]">
                   {formatDate(file.uploadDate)}
                 </p>
@@ -117,7 +117,7 @@ export default function FilesClient({ files, onFilesChange }: FilesClientProps) 
 
           {/* File Details (Expanded) */}
           {expandedId === file.id && (
-            <div className="border-t border-[color:var(--border)] px-6 py-4 bg-[color:var(--surface-soft)]">
+            <div className="border-t border-[color:var(--border)] bg-[color:var(--surface-soft)] px-4 py-4 sm:px-6">
               {/* Product Name */}
               <div className="mb-6">
                 <h4 className="mb-2 font-semibold text-[color:var(--foreground)]">
@@ -202,11 +202,11 @@ export default function FilesClient({ files, onFilesChange }: FilesClientProps) 
               )}
 
               {/* Action Buttons */}
-              <div className="flex gap-3 pt-4 border-t border-[color:var(--border)]">
+              <div className="flex flex-col gap-3 border-t border-[color:var(--border)] pt-4 sm:flex-row">
                 <button
                   onClick={() => handleDelete(file.id)}
                   disabled={deleting === file.id}
-                  className="app-button-secondary flex-1 border-[color:var(--danger-soft)] text-[color:var(--danger)] hover:bg-[color:var(--danger-soft)] disabled:cursor-not-allowed disabled:opacity-50"
+                  className="app-button-secondary w-full flex-1 border-[color:var(--danger-soft)] text-[color:var(--danger)] hover:bg-[color:var(--danger-soft)] disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   {deleting === file.id ? "Törlés folyamatban..." : "Törlés"}
                 </button>
@@ -217,7 +217,7 @@ export default function FilesClient({ files, onFilesChange }: FilesClientProps) 
                       JSON.stringify([file.data])
                     )
                   }
-                  className="app-button-secondary flex-1 border-[color:var(--accent-soft)] text-[color:var(--accent-strong)] hover:bg-[color:var(--accent-soft)]"
+                  className="app-button-secondary w-full flex-1 border-[color:var(--accent-soft)] text-[color:var(--accent-strong)] hover:bg-[color:var(--accent-soft)]"
                 >
                   <Link href="/results">Megtekintés</Link>
                 </button>

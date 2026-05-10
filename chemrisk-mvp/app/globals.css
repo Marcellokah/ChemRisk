@@ -260,3 +260,36 @@ body {
   background: var(--danger-soft);
   color: var(--danger);
 }
+
+@media (max-width: 640px) {
+  .app-container {
+    width: min(1120px, calc(100% - 1rem));
+  }
+
+  .app-section {
+    padding: 1.75rem 0 2.5rem;
+  }
+
+  .app-card,
+  .app-card-strong,
+  .app-card-soft,
+  .app-dropzone {
+    border-radius: 1.25rem;
+  }
+
+  .app-kicker {
+    padding: 0.3rem 0.65rem;
+    font-size: 0.68rem;
+  }
+
+  .app-button-primary,
+  .app-button-secondary,
+  .app-button-ghost {
+    width: 100%;
+  }
+
+  .app-button-primary,
+  .app-button-secondary {
+    padding: 0.85rem 1rem;
+  }
+}
