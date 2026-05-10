@@ -162,7 +162,7 @@ export default function SDSUploader() {
   // --- Render States (Wireframe-ek alapján) ---
 
   return (
-    <div className="w-full max-w-2xl mx-auto">
+    <div className="w-full mx-auto">
       {/* Rejtett input */}
       <input
         type="file"
