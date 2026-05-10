@@ -39,7 +39,7 @@ export default function LoginPage() {
             </div>
             <span className="text-xl font-semibold tracking-tight text-[color:var(--foreground)]">ChemRisk</span>
           </Link>
-          <div className="app-kicker mx-auto mb-4">Belépés</div>
+          <div className="app-kicker mx-auto mb-4 ms-2">Belépés</div>
           <h1 className="text-2xl font-semibold tracking-tight text-[color:var(--foreground)]">Bejelentkezés</h1>
           <p className="mt-2 text-[color:var(--muted)]">
             Jelentkezz be az unlimited feltöltéshez

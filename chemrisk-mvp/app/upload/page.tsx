@@ -9,9 +9,6 @@ export default function UploadPage() {
 
       <section className="app-container app-section">
         <div className="mx-auto">
-          <Link href="/" className="mb-4 inline-flex items-center gap-2 text-sm font-medium text-[color:var(--accent-strong)] hover:underline">
-            &larr; Vissza a kezdőlapra
-          </Link>
 
           <div className="mb-8 max-w-2xl">
             <div className="app-kicker mb-4">Feltöltés</div>

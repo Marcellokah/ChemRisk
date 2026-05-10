@@ -49,10 +49,14 @@ export default function RegisterPage() {
             <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-sky-500 to-cyan-600 text-white font-black shadow-lg shadow-sky-500/20">
               CR
             </div>
-            <span className="text-xl font-semibold tracking-tight text-[color:var(--foreground)]">ChemRisk</span>
+            <span className="text-xl font-semibold tracking-tight text-[color:var(--foreground)]">
+              ChemRisk
+            </span>
           </Link>
-          <div className="app-kicker mx-auto mb-4">Fiók létrehozás</div>
-          <h1 className="text-2xl font-semibold tracking-tight text-[color:var(--foreground)]">Regisztráció</h1>
+          <div className="app-kicker mx-auto mb-4 ms-2">Fiók létrehozás</div>
+          <h1 className="text-2xl font-semibold tracking-tight text-[color:var(--foreground)]">
+            Regisztráció
+          </h1>
           <p className="mt-2 text-[color:var(--muted)]">
             Hozz létre egy fiókot a korlátlan feltöltéshez
           </p>
@@ -125,7 +129,10 @@ export default function RegisterPage() {
           {/* Login Link */}
           <div className="mt-6 text-center text-sm text-[color:var(--muted)]">
             Van már fiókod?{" "}
-            <Link href="/login" className="font-medium text-[color:var(--accent-strong)] hover:underline">
+            <Link
+              href="/login"
+              className="font-medium text-[color:var(--accent-strong)] hover:underline"
+            >
               Jelentkezz be
             </Link>
           </div>
@@ -133,7 +140,10 @@ export default function RegisterPage() {
 
         {/* Back to home */}
         <div className="text-center mt-6">
-          <Link href="/" className="text-sm text-[color:var(--muted)] hover:text-[color:var(--foreground)]">
+          <Link
+            href="/"
+            className="text-sm text-[color:var(--muted)] hover:text-[color:var(--foreground)]"
+          >
             ← Vissza a főoldalra
           </Link>
         </div>
