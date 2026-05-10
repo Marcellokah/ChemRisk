@@ -33,7 +33,7 @@ describe("SDSUploader Component", () => {
     expect(
       screen.getByText(/Nincs még feltöltött dokumentum/i)
     ).toBeInTheDocument();
-    expect(screen.getByText(/\+ Új elem hozzáadása/i)).toBeInTheDocument();
+    expect(screen.getByText(/\+ Elemek hozzáadása/i)).toBeInTheDocument();
   });
 
   // 2. Sikeres feltöltés teszt (Kritikus útvonal)
@@ -86,7 +86,7 @@ describe("SDSUploader Component", () => {
     fireEvent.change(input!, { target: { files: [largeFile] } });
 
     expect(
-      screen.getByText(/mérete nem haladhatja meg a 20MB-ot/i)
+      screen.getByText(/Egy fájl mérete sem haladhatja meg a 20MB-ot/i)
     ).toBeInTheDocument();
   });
 

@@ -11,7 +11,7 @@ export default function SDSUploader() {
   // State initialization
   const [state, setState] = useState<UploadState>({
     status: "IDLE",
-    fileName: null,
+    fileNames: [],
     progress: 0,
   });
 
@@ -24,25 +24,29 @@ export default function SDSUploader() {
     }
     // AC3: Méret validáció (20MB)
     if (file.size > 20 * 1024 * 1024) {
-      return "A fájl mérete nem haladhatja meg a 20MB-ot.";
+      return "Egy fájl mérete sem haladhatja meg a 20MB-ot.";
     }
     return null;
   };
 
-  const simulateUpload = async (file: File) => {
-    const error = validateFile(file);
-    if (error) {
-      setState({
-        status: "ERROR",
-        fileName: file.name,
-        progress: 0,
-        errorMessage: error,
-      });
-      return;
+  const simulateUpload = async (files: File[]) => {
+    if (files.length === 0) return;
+
+    for (const file of files) {
+      const error = validateFile(file);
+      if (error) {
+        setState({
+          status: "ERROR",
+          fileNames: files.map(f => f.name),
+          progress: 0,
+          errorMessage: `${file.name}: ${error}`,
+        });
+        return;
+      }
     }
 
-    // Happy Path indítása (US-01 / AC1)
-    setState({ status: "UPLOADING", fileName: file.name, progress: 0 });
+    // Happy Path indítása (US-01 / AC1 + Bulk)
+    setState({ status: "UPLOADING", fileNames: files.map(f => f.name), progress: 0 });
 
     // Progress simulation while waiting for backend
     let progress = 0;
@@ -53,33 +57,39 @@ export default function SDSUploader() {
     }, 300);
 
     try {
-      const formData = new FormData();
-      formData.append("file", file);
+      const results = await Promise.all(
+        files.map(async (file) => {
+          const formData = new FormData();
+          formData.append("file", file);
 
-      const response = await fetch("/api/extract", {
-        method: "POST",
-        body: formData,
-      });
+          const response = await fetch("/api/extract", {
+            method: "POST",
+            body: formData,
+          });
+
+          if (!response.ok) {
+            throw new Error(`Hiba a szerver oldalon ennél a fájlnál: ${file.name}`);
+          }
+
+          const result = await response.json();
+          // Add fileName to the result data
+          return { ...result.data, fileName: file.name };
+        })
+      );
 
       clearInterval(interval);
-
-      if (!response.ok) {
-        throw new Error("Hiba a szerver oldalon");
-      }
-
-      const result = await response.json();
       
-      // Save data for the results page
-      sessionStorage.setItem("extractedData", JSON.stringify(result.data));
+      // Save data for the results page (Array of ExtractedData)
+      sessionStorage.setItem("extractedData", JSON.stringify(results));
 
       setState((prev) => ({ ...prev, progress: 100, status: "SUCCESS" }));
-    } catch (err) {
+    } catch (err: any) {
       clearInterval(interval);
       setState({
         status: "ERROR",
-        fileName: file.name,
+        fileNames: files.map(f => f.name),
         progress: 0,
-        errorMessage: "Hiba történt a fájl feldolgozása során.",
+        errorMessage: err.message || "Hiba történt a fájlok feldolgozása során.",
       });
     }
   };
@@ -87,15 +97,15 @@ export default function SDSUploader() {
   // --- Event Handlers ---
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      simulateUpload(e.target.files[0]);
+    if (e.target.files && e.target.files.length > 0) {
+      simulateUpload(Array.from(e.target.files));
     }
   };
 
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
-    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-      simulateUpload(e.dataTransfer.files[0]);
+    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+      simulateUpload(Array.from(e.dataTransfer.files));
     }
   };
 
@@ -104,7 +114,7 @@ export default function SDSUploader() {
   };
 
   const handleReset = () => {
-    setState({ status: "IDLE", fileName: null, progress: 0 });
+    setState({ status: "IDLE", fileNames: [], progress: 0 });
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
@@ -116,6 +126,7 @@ export default function SDSUploader() {
       <input
         type="file"
         accept=".pdf"
+        multiple
         ref={fileInputRef}
         onChange={handleFileChange}
         className="hidden"
@@ -126,7 +137,7 @@ export default function SDSUploader() {
         <div
           onDrop={handleDrop}
           onDragOver={handleDragOver}
-          className="border-2 border-dashed border-slate-300 rounded-xl p-12 text-center bg-slate-50 hover:bg-slate-100 hover:border-blue-500 transition-colors cursor-pointer"
+          className="border-2 border-dashed border-slate-300 rounded-xl p-12 text-center bg-slate-50 hover:bg-slate-100 hover:border-blue-50 transition-colors cursor-pointer"
           onClick={() => fileInputRef.current?.click()}
         >
           <div className="flex justify-center mb-4">
@@ -149,10 +160,10 @@ export default function SDSUploader() {
             Nincs még feltöltött dokumentum
           </h3>
           <p className="text-slate-500 mb-6">
-            Húzd ide a biztonsági adatlapot (PDF), vagy kattints a tallózáshoz.
+            Húzd ide a biztonsági adatlapokat (PDF), vagy kattints a tallózáshoz. Akár többet is kijelölhetsz.
           </p>
           <button className="px-6 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition">
-            + Új elem hozzáadása
+            + Elemek hozzáadása
           </button>
         </div>
       )}
@@ -165,7 +176,9 @@ export default function SDSUploader() {
               PDF
             </div>
             <div className="flex-1">
-              <p className="font-medium text-slate-900">{state.fileName}</p>
+              <p className="font-medium text-slate-900">
+                {state.fileNames.length === 1 ? state.fileNames[0] : `${state.fileNames.length} fájl kiválasztva`}
+              </p>
               <p className="text-sm text-slate-500">
                 {state.status === "UPLOADING"
                   ? "Feldolgozás alatt..."

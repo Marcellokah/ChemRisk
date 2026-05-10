@@ -6,46 +6,55 @@ import ResultsClient from "./ResultsClient";
 import { ExtractedData } from "../types";
 
 // Mock data to simulate the extracted content (fallback)
-const fallbackData: ExtractedData = {
-  productName: "Acetone Extra Pure (Fallback)",
-  ingredients: [
-    { name: "Acetone", casNumber: "67-64-1", concentration: "99-100%" },
-  ],
-  hazardClasses: [
-    "Flam. Liq. 2",
-    "Eye Irrit. 2",
-    "STOT SE 3",
-  ],
-  hStatements: [
-    "H225: Highly flammable liquid and vapour.",
-    "H319: Causes serious eye irritation.",
-    "H336: May cause drowsiness or dizziness.",
-    "EUH066: Repeated exposure may cause skin dryness or cracking.",
-  ],
-  pStatements: [
-    "P210: Keep away from heat, hot surfaces, sparks, open flames and other ignition sources. No smoking.",
-    "P233: Keep container tightly closed.",
-    "P305+P351+P338: IF IN EYES: Rinse cautiously with water for several minutes. Remove contact lenses, if present and easy to do. Continue rinsing.",
-  ],
-};
+const fallbackData: ExtractedData[] = [
+  {
+    fileName: "fallback.pdf",
+    productName: "Acetone Extra Pure (Fallback)",
+    ingredients: [
+      { name: "Acetone", casNumber: "67-64-1", concentration: "99-100%" },
+    ],
+    hazardClasses: [
+      "Flam. Liq. 2",
+      "Eye Irrit. 2",
+      "STOT SE 3",
+    ],
+    hStatements: [
+      "H225: Highly flammable liquid and vapour.",
+      "H319: Causes serious eye irritation.",
+      "H336: May cause drowsiness or dizziness.",
+      "EUH066: Repeated exposure may cause skin dryness or cracking.",
+    ],
+    pStatements: [
+      "P210: Keep away from heat, hot surfaces, sparks, open flames and other ignition sources. No smoking.",
+      "P233: Keep container tightly closed.",
+      "P305+P351+P338: IF IN EYES: Rinse cautiously with water for several minutes. Remove contact lenses, if present and easy to do. Continue rinsing.",
+    ],
+  }
+];
 
 export default function ResultsPage() {
-  const [data, setData] = useState<ExtractedData | null>(null);
+  const [dataList, setDataList] = useState<ExtractedData[] | null>(null);
 
   useEffect(() => {
     const stored = sessionStorage.getItem("extractedData");
     if (stored) {
       try {
-        setData(JSON.parse(stored));
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed)) {
+          setDataList(parsed);
+        } else {
+          // Backward compatibility for single upload
+          setDataList([parsed]);
+        }
       } catch (e) {
-        setData(fallbackData);
+        setDataList(fallbackData);
       }
     } else {
-      setData(fallbackData);
+      setDataList(fallbackData);
     }
   }, []);
 
-  if (!data) {
+  if (!dataList) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-50 text-slate-900">
         <p>Adatok betöltése...</p>
@@ -86,87 +95,105 @@ export default function ResultsPage() {
               Kinyert adatok áttekintése
             </h1>
             <p className="text-lg text-slate-500">
-              Ellenőrizze az automatikusan felismert adatokat a dokumentumból.
+              Ellenőrizze az automatikusan felismert adatokat a dokumentumból. Összesen {dataList.length} fájl feldolgozva.
             </p>
           </div>
-          <ResultsClient data={data} />
+          <ResultsClient dataList={dataList} />
         </div>
 
-        <div className="bg-white border border-slate-200 rounded-xl p-8 shadow-sm">
-          {/* Terméknév */}
-          <div className="mb-8">
-            <h2 className="text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">Terméknév</h2>
-            <p className="text-xl font-semibold">{data.productName}</p>
-          </div>
-
-          {/* Összetevők */}
-          <div className="mb-8">
-            <h2 className="text-sm font-bold text-slate-500 uppercase tracking-wider mb-4">Összetevők és CAS számok</h2>
-            <div className="overflow-x-auto">
-              <table className="w-full text-left border-collapse">
-                <thead>
-                  <tr className="bg-slate-50 border-b border-slate-200 text-sm">
-                    <th className="py-3 px-4 font-semibold text-slate-700">Anyagnév</th>
-                    <th className="py-3 px-4 font-semibold text-slate-700">CAS szám</th>
-                    <th className="py-3 px-4 font-semibold text-slate-700">Koncentráció</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {data.ingredients.map((ing, idx) => (
-                    <tr key={idx} className="border-b border-slate-100 last:border-0 hover:bg-slate-50">
-                      <td className="py-3 px-4">{ing.name}</td>
-                      <td className="py-3 px-4 font-mono">{ing.casNumber}</td>
-                      <td className="py-3 px-4">{ing.concentration}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {/* Veszélyességi osztályok és H-mondatok */}
-            <div>
-              <div className="mb-6">
-                <h2 className="text-sm font-bold text-slate-500 uppercase tracking-wider mb-3">Veszélyességi osztályok</h2>
-                <ul className="list-disc list-inside space-y-1 text-slate-700">
-                  {data.hazardClasses.map((hc, idx) => (
-                    <li key={idx}>{hc}</li>
-                  ))}
-                </ul>
+        <div className="space-y-8">
+          {dataList.map((data, fileIndex) => (
+            <div key={fileIndex} className="bg-white border border-slate-200 rounded-xl p-8 shadow-sm">
+              {data.fileName && (
+                <div className="mb-4 inline-block px-3 py-1 bg-slate-100 text-slate-700 rounded-md text-sm font-medium border border-slate-200">
+                  Fájl: {data.fileName}
+                </div>
+              )}
+              
+              {/* Terméknév */}
+              <div className="mb-8">
+                <h2 className="text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">Terméknév</h2>
+                <p className="text-xl font-semibold">{data.productName}</p>
               </div>
-              <div>
-                <h2 className="text-sm font-bold text-slate-500 uppercase tracking-wider mb-3">H-mondatok (Veszély)</h2>
-                <ul className="space-y-2">
-                  {data.hStatements.map((h, idx) => {
-                    const [code, ...rest] = h.split(":");
-                    return (
-                      <li key={idx} className="flex gap-2">
-                        <span className="font-bold text-red-600 shrink-0">{code}:</span>
-                        <span className="text-slate-700">{rest.join(":").trim()}</span>
-                      </li>
-                    );
-                  })}
-                </ul>
+
+              {/* Összetevők */}
+              <div className="mb-8">
+                <h2 className="text-sm font-bold text-slate-500 uppercase tracking-wider mb-4">Összetevők és CAS számok</h2>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left border-collapse">
+                    <thead>
+                      <tr className="bg-slate-50 border-b border-slate-200 text-sm">
+                        <th className="py-3 px-4 font-semibold text-slate-700">Anyagnév</th>
+                        <th className="py-3 px-4 font-semibold text-slate-700">CAS szám</th>
+                        <th className="py-3 px-4 font-semibold text-slate-700">Koncentráció</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {data.ingredients.map((ing, idx) => (
+                        <tr key={idx} className="border-b border-slate-100 last:border-0 hover:bg-slate-50">
+                          <td className="py-3 px-4">{ing.name}</td>
+                          <td className="py-3 px-4 font-mono">{ing.casNumber}</td>
+                          <td className="py-3 px-4">{ing.concentration}</td>
+                        </tr>
+                      ))}
+                      {data.ingredients.length === 0 && (
+                        <tr>
+                          <td colSpan={3} className="py-3 px-4 text-slate-500 italic">Nem található összetevő adat.</td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                {/* Veszélyességi osztályok és H-mondatok */}
+                <div>
+                  <div className="mb-6">
+                    <h2 className="text-sm font-bold text-slate-500 uppercase tracking-wider mb-3">Veszélyességi osztályok</h2>
+                    <ul className="list-disc list-inside space-y-1 text-slate-700">
+                      {data.hazardClasses.map((hc, idx) => (
+                        <li key={idx}>{hc}</li>
+                      ))}
+                      {data.hazardClasses.length === 0 && <li className="text-slate-500 italic list-none">N/A</li>}
+                    </ul>
+                  </div>
+                  <div>
+                    <h2 className="text-sm font-bold text-slate-500 uppercase tracking-wider mb-3">H-mondatok (Veszély)</h2>
+                    <ul className="space-y-2">
+                      {data.hStatements.map((h, idx) => {
+                        const [code, ...rest] = h.split(":");
+                        return (
+                          <li key={idx} className="flex gap-2">
+                            <span className="font-bold text-red-600 shrink-0">{code}:</span>
+                            <span className="text-slate-700">{rest.join(":").trim()}</span>
+                          </li>
+                        );
+                      })}
+                      {data.hStatements.length === 0 && <li className="text-slate-500 italic">N/A</li>}
+                    </ul>
+                  </div>
+                </div>
+
+                {/* P-mondatok */}
+                <div>
+                  <h2 className="text-sm font-bold text-slate-500 uppercase tracking-wider mb-3">P-mondatok (Óvintézkedés)</h2>
+                  <ul className="space-y-2">
+                    {data.pStatements.map((p, idx) => {
+                      const [code, ...rest] = p.split(":");
+                      return (
+                        <li key={idx} className="flex gap-2">
+                          <span className="font-bold text-blue-600 shrink-0">{code}:</span>
+                          <span className="text-slate-700">{rest.join(":").trim()}</span>
+                        </li>
+                      );
+                    })}
+                    {data.pStatements.length === 0 && <li className="text-slate-500 italic">N/A</li>}
+                  </ul>
+                </div>
               </div>
             </div>
-
-            {/* P-mondatok */}
-            <div>
-              <h2 className="text-sm font-bold text-slate-500 uppercase tracking-wider mb-3">P-mondatok (Óvintézkedés)</h2>
-              <ul className="space-y-2">
-                {data.pStatements.map((p, idx) => {
-                  const [code, ...rest] = p.split(":");
-                  return (
-                    <li key={idx} className="flex gap-2">
-                      <span className="font-bold text-blue-600 shrink-0">{code}:</span>
-                      <span className="text-slate-700">{rest.join(":").trim()}</span>
-                    </li>
-                  );
-                })}
-              </ul>
-            </div>
-          </div>
+          ))}
         </div>
       </section>
     </main>

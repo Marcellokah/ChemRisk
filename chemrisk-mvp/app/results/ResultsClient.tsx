@@ -5,44 +5,74 @@ import * as XLSX from "xlsx";
 import { ExtractedData } from "../types";
 
 interface ResultsClientProps {
-  data: ExtractedData;
+  dataList: ExtractedData[];
 }
 
-export default function ResultsClient({ data }: ResultsClientProps) {
+export default function ResultsClient({ dataList }: ResultsClientProps) {
   const handleExportExcel = () => {
     const combinedData: any[] = [];
 
-    // 1. Általános adatok
-    combinedData.push({ "Kategória": "Általános", "Részlet": "Terméknév", "Érték": data.productName });
+    dataList.forEach((data, index) => {
+      const fileLabel = data.fileName || `Fájl ${index + 1}`;
 
-    // 2. Összetevők
-    data.ingredients.forEach(i => {
+      // 1. Általános adatok
       combinedData.push({ 
-        "Kategória": "Összetevő", 
-        "Részlet": `${i.name} (CAS: ${i.casNumber})`, 
-        "Érték": i.concentration || "N/A"
+        "Fájl": fileLabel,
+        "Kategória": "Általános", 
+        "Részlet": "Terméknév", 
+        "Érték": data.productName 
       });
-    });
 
-    // 3. Veszélyességi osztályok
-    data.hazardClasses.forEach(hc => {
-      combinedData.push({ "Kategória": "Veszélyességi osztály", "Részlet": hc, "Érték": "" });
-    });
+      // 2. Összetevők
+      data.ingredients.forEach(i => {
+        combinedData.push({ 
+          "Fájl": fileLabel,
+          "Kategória": "Összetevő", 
+          "Részlet": `${i.name} (CAS: ${i.casNumber})`, 
+          "Érték": i.concentration || "N/A"
+        });
+      });
 
-    // 4. H-mondatok
-    data.hStatements.forEach(h => {
-      const parts = h.split(":");
-      const code = parts[0];
-      const text = parts.slice(1).join(":").trim();
-      combinedData.push({ "Kategória": "H-mondat", "Részlet": code, "Érték": text });
-    });
+      // 3. Veszélyességi osztályok
+      data.hazardClasses.forEach(hc => {
+        combinedData.push({ 
+          "Fájl": fileLabel,
+          "Kategória": "Veszélyességi osztály", 
+          "Részlet": hc, 
+          "Érték": "" 
+        });
+      });
 
-    // 5. P-mondatok
-    data.pStatements.forEach(p => {
-      const parts = p.split(":");
-      const code = parts[0];
-      const text = parts.slice(1).join(":").trim();
-      combinedData.push({ "Kategória": "P-mondat", "Részlet": code, "Érték": text });
+      // 4. H-mondatok
+      data.hStatements.forEach(h => {
+        const parts = h.split(":");
+        const code = parts[0];
+        const text = parts.slice(1).join(":").trim();
+        combinedData.push({ 
+          "Fájl": fileLabel,
+          "Kategória": "H-mondat", 
+          "Részlet": code, 
+          "Érték": text 
+        });
+      });
+
+      // 5. P-mondatok
+      data.pStatements.forEach(p => {
+        const parts = p.split(":");
+        const code = parts[0];
+        const text = parts.slice(1).join(":").trim();
+        combinedData.push({ 
+          "Fájl": fileLabel,
+          "Kategória": "P-mondat", 
+          "Részlet": code, 
+          "Érték": text 
+        });
+      });
+      
+      // Üres sor hozzáadása, ha nem ez az utolsó elem (vizuális elválasztó)
+      if (index < dataList.length - 1) {
+        combinedData.push({ "Fájl": "", "Kategória": "", "Részlet": "", "Érték": "" });
+      }
     });
 
     // Munkalap létrehozása (minden egyben, hogy ne lehessen eltéveszteni)
@@ -50,7 +80,8 @@ export default function ResultsClient({ data }: ResultsClientProps) {
     
     // Oszlopszélességek beállítása az olvashatóságért
     ws["!cols"] = [
-      { wch: 25 }, // Kategória
+      { wch: 30 }, // Fájl
+      { wch: 20 }, // Kategória
       { wch: 40 }, // Részlet (Név/Kód)
       { wch: 60 }  // Érték (Szöveg)
     ];
@@ -59,7 +90,7 @@ export default function ResultsClient({ data }: ResultsClientProps) {
     XLSX.utils.book_append_sheet(wb, ws, "Kinyert Adatok");
 
     // Excel letöltése
-    XLSX.writeFile(wb, `chemrisk_adatok_${new Date().getTime()}.xlsx`);
+    XLSX.writeFile(wb, `chemrisk_bulk_adatok_${new Date().getTime()}.xlsx`);
   };
 
   return (

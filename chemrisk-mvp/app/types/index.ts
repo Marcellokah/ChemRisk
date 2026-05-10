@@ -2,7 +2,7 @@ export type UploadStatus = "IDLE" | "UPLOADING" | "SUCCESS" | "ERROR";
 
 export interface UploadState {
   status: UploadStatus;
-  fileName: string | null;
+  fileNames: string[];
   progress: number; // 0-100
   errorMessage?: string;
 }
@@ -14,6 +14,7 @@ export interface ExtractedIngredient {
 }
 
 export interface ExtractedData {
+  fileName?: string;
   productName: string;
   ingredients: ExtractedIngredient[];
   hazardClasses: string[];

@@ -9,7 +9,7 @@ import * as XLSX from "xlsx";
 // Mock the xlsx library
 jest.mock("xlsx", () => ({
   utils: {
-    json_to_sheet: jest.fn(),
+    json_to_sheet: jest.fn(() => ({})),
     book_new: jest.fn(() => ({})),
     book_append_sheet: jest.fn(),
   },
@@ -17,25 +17,26 @@ jest.mock("xlsx", () => ({
 }));
 
 describe("ResultsClient Component", () => {
-  const mockData = {
+  const mockDataList = [{
+    fileName: "test.pdf",
     productName: "Test Product",
     ingredients: [{ name: "Test Ing", casNumber: "123-45-6", concentration: "10%" }],
     hazardClasses: ["Class 1"],
     hStatements: ["H100: Test hazard"],
     pStatements: ["P100: Test precaution"],
-  };
+  }];
 
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
   test("Rendereli az export gombot", () => {
-    render(<ResultsClient data={mockData} />);
+    render(<ResultsClient dataList={mockDataList} />);
     expect(screen.getByText("Exportálás Excel-be")).toBeInTheDocument();
   });
 
   test("Meghívja a writeFileXLSX függvényt a gombnyomásra", () => {
-    render(<ResultsClient data={mockData} />);
+    render(<ResultsClient dataList={mockDataList} />);
     
     const button = screen.getByText("Exportálás Excel-be");
     fireEvent.click(button);
