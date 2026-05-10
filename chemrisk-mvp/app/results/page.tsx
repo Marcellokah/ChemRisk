@@ -64,20 +64,20 @@ export default function ResultsPage() {
   }
 
   return (
-    <main className="min-h-screen bg-slate-50 text-slate-900 font-sans">
+    <main className="app-shell text-[color:var(--foreground)]">
       <Header />
 
-      {/* Main Content */}
-      <section className="max-w-5xl mx-auto px-6 py-12">
-        <div className="mb-10 flex justify-between items-end">
-          <div>
-            <Link href="/" className="text-blue-600 hover:underline mb-4 inline-block text-sm">
+      <section className="app-container app-section">
+        <div className="mb-8 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+          <div className="max-w-3xl">
+            <Link href="/" className="mb-4 inline-flex items-center gap-2 text-sm font-medium text-[color:var(--accent-strong)] hover:underline">
               &larr; Vissza a feltöltéshez
             </Link>
-            <h1 className="text-3xl font-bold text-slate-900 mb-2">
+            <div className="app-kicker mb-4">Ellenőrzés</div>
+            <h1 className="app-heading text-4xl font-semibold tracking-tight text-[color:var(--foreground)]">
               Kinyert adatok áttekintése
             </h1>
-            <p className="text-lg text-slate-500">
+            <p className="mt-3 text-lg text-[color:var(--muted)]">
               Ellenőrizze az automatikusan felismert adatokat a dokumentumból. Összesen {dataList.length} fájl feldolgozva.
             </p>
           </div>
@@ -86,42 +86,42 @@ export default function ResultsPage() {
 
         <div className="space-y-8">
           {dataList.map((data, fileIndex) => (
-            <div key={fileIndex} className="bg-white border border-slate-200 rounded-xl p-8 shadow-sm">
+            <div key={fileIndex} className="app-card-strong p-6 sm:p-8">
               {data.fileName && (
-                <div className="mb-4 inline-block px-3 py-1 bg-slate-100 text-slate-700 rounded-md text-sm font-medium border border-slate-200">
+                <div className="app-chip mb-4">
                   Fájl: {data.fileName}
                 </div>
               )}
               
               {/* Terméknév */}
               <div className="mb-8">
-                <h2 className="text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">Terméknév</h2>
-                <p className="text-xl font-semibold">{data.productName}</p>
+                <h2 className="mb-2 text-xs font-semibold uppercase tracking-[0.22em] text-[color:var(--muted)]">Terméknév</h2>
+                <p className="text-2xl font-semibold tracking-tight text-[color:var(--foreground)]">{data.productName}</p>
               </div>
 
               {/* Összetevők */}
               <div className="mb-8">
-                <h2 className="text-sm font-bold text-slate-500 uppercase tracking-wider mb-4">Összetevők és CAS számok</h2>
+                <h2 className="mb-4 text-xs font-semibold uppercase tracking-[0.22em] text-[color:var(--muted)]">Összetevők és CAS számok</h2>
                 <div className="overflow-x-auto">
-                  <table className="w-full text-left border-collapse">
+                  <table className="w-full border-collapse text-left">
                     <thead>
-                      <tr className="bg-slate-50 border-b border-slate-200 text-sm">
-                        <th className="py-3 px-4 font-semibold text-slate-700">Anyagnév</th>
-                        <th className="py-3 px-4 font-semibold text-slate-700">CAS szám</th>
-                        <th className="py-3 px-4 font-semibold text-slate-700">Koncentráció</th>
+                      <tr className="border-b border-[color:var(--border)] text-sm text-[color:var(--muted)]">
+                        <th className="px-4 py-3 font-semibold">Anyagnév</th>
+                        <th className="px-4 py-3 font-semibold">CAS szám</th>
+                        <th className="px-4 py-3 font-semibold">Koncentráció</th>
                       </tr>
                     </thead>
                     <tbody>
                       {data.ingredients.map((ing, idx) => (
-                        <tr key={idx} className="border-b border-slate-100 last:border-0 hover:bg-slate-50">
-                          <td className="py-3 px-4">{ing.name}</td>
-                          <td className="py-3 px-4 font-mono">{ing.casNumber}</td>
-                          <td className="py-3 px-4">{ing.concentration}</td>
+                        <tr key={idx} className="border-b border-[color:var(--border)] last:border-0 hover:bg-[color:var(--surface-soft)]">
+                          <td className="px-4 py-3">{ing.name}</td>
+                          <td className="px-4 py-3 font-mono text-[color:var(--muted)]">{ing.casNumber}</td>
+                          <td className="px-4 py-3">{ing.concentration}</td>
                         </tr>
                       ))}
                       {data.ingredients.length === 0 && (
                         <tr>
-                          <td colSpan={3} className="py-3 px-4 text-slate-500 italic">Nem található összetevő adat.</td>
+                          <td colSpan={3} className="px-4 py-3 italic text-[color:var(--muted)]">Nem található összetevő adat.</td>
                         </tr>
                       )}
                     </tbody>
@@ -133,45 +133,45 @@ export default function ResultsPage() {
                 {/* Veszélyességi osztályok és H-mondatok */}
                 <div>
                   <div className="mb-6">
-                    <h2 className="text-sm font-bold text-slate-500 uppercase tracking-wider mb-3">Veszélyességi osztályok</h2>
-                    <ul className="list-disc list-inside space-y-1 text-slate-700">
+                    <h2 className="mb-3 text-xs font-semibold uppercase tracking-[0.22em] text-[color:var(--muted)]">Veszélyességi osztályok</h2>
+                    <ul className="list-disc list-inside space-y-1 text-[color:var(--foreground)]">
                       {data.hazardClasses.map((hc, idx) => (
                         <li key={idx}>{hc}</li>
                       ))}
-                      {data.hazardClasses.length === 0 && <li className="text-slate-500 italic list-none">N/A</li>}
+                      {data.hazardClasses.length === 0 && <li className="list-none italic text-[color:var(--muted)]">N/A</li>}
                     </ul>
                   </div>
                   <div>
-                    <h2 className="text-sm font-bold text-slate-500 uppercase tracking-wider mb-3">H-mondatok (Veszély)</h2>
+                    <h2 className="mb-3 text-xs font-semibold uppercase tracking-[0.22em] text-[color:var(--muted)]">H-mondatok (Veszély)</h2>
                     <ul className="space-y-2">
                       {data.hStatements.map((h, idx) => {
                         const [code, ...rest] = h.split(":");
                         return (
                           <li key={idx} className="flex gap-2">
-                            <span className="font-bold text-red-600 shrink-0">{code}:</span>
-                            <span className="text-slate-700">{rest.join(":").trim()}</span>
+                            <span className="shrink-0 font-bold text-[color:var(--danger)]">{code}:</span>
+                            <span className="text-[color:var(--foreground)]">{rest.join(":").trim()}</span>
                           </li>
                         );
                       })}
-                      {data.hStatements.length === 0 && <li className="text-slate-500 italic">N/A</li>}
+                      {data.hStatements.length === 0 && <li className="italic text-[color:var(--muted)]">N/A</li>}
                     </ul>
                   </div>
                 </div>
 
                 {/* P-mondatok */}
                 <div>
-                  <h2 className="text-sm font-bold text-slate-500 uppercase tracking-wider mb-3">P-mondatok (Óvintézkedés)</h2>
+                  <h2 className="mb-3 text-xs font-semibold uppercase tracking-[0.22em] text-[color:var(--muted)]">P-mondatok (Óvintézkedés)</h2>
                   <ul className="space-y-2">
                     {data.pStatements.map((p, idx) => {
                       const [code, ...rest] = p.split(":");
                       return (
                         <li key={idx} className="flex gap-2">
-                          <span className="font-bold text-blue-600 shrink-0">{code}:</span>
-                          <span className="text-slate-700">{rest.join(":").trim()}</span>
+                          <span className="shrink-0 font-bold text-[color:var(--accent-strong)]">{code}:</span>
+                          <span className="text-[color:var(--foreground)]">{rest.join(":").trim()}</span>
                         </li>
                       );
                     })}
-                    {data.pStatements.length === 0 && <li className="text-slate-500 italic">N/A</li>}
+                    {data.pStatements.length === 0 && <li className="italic text-[color:var(--muted)]">N/A</li>}
                   </ul>
                 </div>
               </div>

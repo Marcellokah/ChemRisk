@@ -1,14 +1,38 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useAuth } from "../context/AuthContext";
 import { useRouter } from "next/navigation";
 
+type ThemeMode = "light" | "dark";
+
 export default function Header() {
-  const { user, logout, uploadLimit } = useAuth();
+  const { user, logout } = useAuth();
   const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [theme, setTheme] = useState<ThemeMode>("light");
+
+  useEffect(() => {
+    const storedTheme = window.localStorage.getItem("chemrisk-theme");
+    const initialTheme: ThemeMode =
+      storedTheme === "dark" || storedTheme === "light"
+        ? storedTheme
+        : window.matchMedia("(prefers-color-scheme: dark)").matches
+          ? "dark"
+          : "light";
+
+    setTheme(initialTheme);
+    document.documentElement.dataset.theme = initialTheme;
+    document.documentElement.style.colorScheme = initialTheme;
+  }, []);
+
+  const applyTheme = (nextTheme: ThemeMode) => {
+    setTheme(nextTheme);
+    document.documentElement.dataset.theme = nextTheme;
+    document.documentElement.style.colorScheme = nextTheme;
+    window.localStorage.setItem("chemrisk-theme", nextTheme);
+  };
 
   const handleLogout = async () => {
     await logout();
@@ -16,59 +40,86 @@ export default function Header() {
     setMenuOpen(false);
   };
 
+  const pillBase =
+    "inline-flex items-center justify-center gap-2 rounded-full border px-4 py-2 text-sm font-medium transition-colors duration-200";
+  const pillDefault =
+    "border-[color:var(--border)] bg-[color:var(--surface-strong)] text-[color:var(--foreground)] hover:bg-[color:var(--surface-soft)] hover:border-[color:var(--border-strong)]";
+  const pillPrimary =
+    "border-[color:var(--accent-soft)] bg-[color:var(--accent-soft)] text-[color:var(--accent-strong)] hover:border-[color:var(--accent-strong)]";
+
   return (
-    <header className="bg-white border-b border-slate-200 sticky top-0 z-10">
-      <div className="max-w-5xl mx-auto px-6 py-4 flex justify-between items-center">
-        {/* Logo */}
-        <Link href="/" className="flex items-center space-x-2">
-          <div className="bg-blue-600 text-white font-bold p-2 rounded">
+    <header className="sticky top-0 z-20 border-b border-[color:var(--border)] bg-[color:var(--surface)] backdrop-blur-xl">
+      <div className="app-container flex items-center justify-between gap-3 py-3 sm:py-4">
+        <Link href="/" className="group flex items-center gap-3 shrink-0">
+          <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-sky-500 to-cyan-600 text-white font-black shadow-lg shadow-sky-500/20 transition-transform group-hover:-translate-y-0.5">
             CR
           </div>
-          <span className="text-xl font-bold tracking-tight hidden sm:inline">
-            ChemRisk
-          </span>
+          <div className="hidden lg:block">
+            <span className="block text-[0.7rem] font-semibold uppercase tracking-[0.22em] text-[color:var(--muted)]">
+              ChemRisk
+            </span>
+            <span className="text-lg font-semibold tracking-tight text-[color:var(--foreground)]">
+              Biztonsági adatlap elemzés
+            </span>
+          </div>
         </Link>
 
-        {/* Navigation */}
-        <nav className="hidden md:flex space-x-6 text-sm font-medium text-slate-600">
-          <Link href="/files" className="hover:text-blue-600">
+        <nav className="hidden md:flex items-center gap-2">
+          <Link
+            href="/files"
+            className={`${pillBase} ${pillDefault}`}
+          >
             Dokumentumok
           </Link>
-          <Link href="/" className="text-blue-600 bg-blue-50 px-3 py-1 rounded-md">
+          <Link
+            href="/"
+            className={`${pillBase} ${pillPrimary}`}
+          >
             Feltöltés
           </Link>
         </nav>
 
-        {/* Auth Section */}
-        <div className="relative">
-          {user ? (
-            <div className="flex items-center gap-4">
-              {/* Upload limit indicator */}
-              {uploadLimit.limit !== Infinity && (
-                <div className="text-xs bg-yellow-50 text-yellow-800 px-3 py-1 rounded-full border border-yellow-200">
-                  {uploadLimit.remaining}/{uploadLimit.limit} feltöltés
-                </div>
-              )}
+        <div className="relative flex items-center gap-2 shrink-0">
+          <button
+            type="button"
+            onClick={() => applyTheme(theme === "dark" ? "light" : "dark")}
+            className={`${pillBase} ${pillDefault} px-3`}
+            aria-label="Theme toggle"
+          >
+            {theme === "dark" ? (
+              <>
+                <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M12 3v2m0 14v2m8.485-8.485-1.414 1.414M5.929 5.929 4.515 4.515m0 14.97 1.414-1.414M19.485 4.515l-1.414 1.414M21 12h-2M5 12H3m9 9a7 7 0 1 1 0-14 7 7 0 0 1 0 14Z" />
+                </svg>
+                <span className="hidden sm:inline">Világos</span>
+              </>
+            ) : (
+              <>
+                <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M21 12.8A8.5 8.5 0 0 1 11.2 3a8.5 8.5 0 1 0 9.8 9.8Z" />
+                </svg>
+                <span className="hidden sm:inline">Sötét</span>
+              </>
+            )}
+          </button>
 
-              {/* User menu */}
+          {user ? (
+            <div className="flex items-center gap-3">
               <button
                 onClick={() => setMenuOpen(!menuOpen)}
-                className="flex items-center space-x-2 text-sm font-medium text-slate-700 hover:text-slate-900"
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-[color:var(--border)] bg-[color:var(--surface-strong)] text-sm font-semibold text-[color:var(--foreground)] transition hover:border-[color:var(--border-strong)]"
               >
-                <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-blue-600">
-                  {user.email?.[0]?.toUpperCase() || "U"}
-                </div>
+                {user.email?.[0]?.toUpperCase() || "U"}
               </button>
 
-              {/* Dropdown menu */}
               {menuOpen && (
-                <div className="absolute right-0 mt-2 w-48 bg-white border border-slate-200 rounded-lg shadow-lg">
-                  <div className="px-4 py-2 border-b text-sm text-slate-900">
+                <div className="absolute right-0 top-12 w-56 overflow-hidden rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface-strong)] shadow-xl shadow-slate-950/10">
+                  <div className="border-b border-[color:var(--border)] px-4 py-3 text-sm font-medium text-[color:var(--foreground)]">
                     {user.email}
                   </div>
                   <button
                     onClick={handleLogout}
-                    className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50"
+                    className="w-full px-4 py-3 text-left text-sm font-medium text-[color:var(--danger)] transition hover:bg-[color:var(--danger-soft)]"
                   >
                     Kijelentkezés
                   </button>
@@ -76,17 +127,11 @@ export default function Header() {
               )}
             </div>
           ) : (
-            <div className="flex items-center space-x-3">
-              <Link
-                href="/login"
-                className="text-sm font-medium text-slate-600 hover:text-slate-900"
-              >
+            <div className="flex items-center gap-2">
+              <Link href="/login" className={`${pillBase} ${pillDefault}`}>
                 Bejelentkezés
               </Link>
-              <Link
-                href="/register"
-                className="text-sm font-medium bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
-              >
+              <Link href="/register" className={`${pillBase} ${pillPrimary}`}>
                 Regisztráció
               </Link>
             </div>

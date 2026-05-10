@@ -35,26 +35,26 @@ export default function FilesPage() {
   }, []);
 
   return (
-    <main className="min-h-screen bg-slate-50 text-slate-900 font-sans">
+    <main className="app-shell text-[color:var(--foreground)]">
       <Header />
 
-      {/* Main Content */}
-      <section className="max-w-5xl mx-auto px-6 py-12">
-        <div className="mb-10">
-          <h1 className="text-3xl font-bold text-slate-900 mb-3">
+      <section className="app-container app-section">
+        <div className="mb-8 max-w-3xl">
+          <div className="app-kicker mb-4">Archívum</div>
+          <h1 className="app-heading text-4xl font-semibold tracking-tight text-[color:var(--foreground)]">
             Dokumentumok kezelése
           </h1>
-          <p className="text-lg text-slate-500">
+          <p className="mt-3 text-lg text-[color:var(--muted)]">
             Az összes feltöltött és feldolgozott fájl listája
           </p>
         </div>
 
         {loading ? (
-          <div className="flex items-center justify-center py-12">
-            <p className="text-slate-500">Fájlok betöltése...</p>
+          <div className="app-card p-10 text-center">
+            <p className="text-[color:var(--muted)]">Fájlok betöltése...</p>
           </div>
         ) : error ? (
-          <div className="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-md">
+          <div className="app-card-soft border-[color:var(--danger-soft)] p-4 text-[color:var(--danger)]">
             <p className="font-medium">Hiba</p>
             <p>{error}</p>
           </div>

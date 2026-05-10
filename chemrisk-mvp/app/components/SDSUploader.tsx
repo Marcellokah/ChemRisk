@@ -178,13 +178,12 @@ export default function SDSUploader() {
         <div
           onDrop={handleDrop}
           onDragOver={handleDragOver}
-          className="border-2 border-dashed border-slate-300 rounded-xl p-12 text-center bg-slate-50 hover:bg-slate-100 hover:border-blue-50 transition-colors cursor-pointer"
+          className="app-dropzone cursor-pointer p-8 text-center transition-all duration-200 hover:-translate-y-0.5 hover:shadow-xl sm:p-12"
           onClick={() => fileInputRef.current?.click()}
         >
-          <div className="flex justify-center mb-4">
-            {/* Cloud Icon SVG */}
+          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-[color:var(--accent-soft)] text-[color:var(--accent-strong)] shadow-inner shadow-sky-500/10">
             <svg
-              className="w-16 h-16 text-slate-400"
+              className="h-8 w-8"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -197,26 +196,26 @@ export default function SDSUploader() {
               />
             </svg>
           </div>
-          <h3 className="text-xl font-semibold text-slate-800 mb-2">
+          <h3 className="mt-5 text-2xl font-semibold tracking-tight text-[color:var(--foreground)]">
             Nincs még feltöltött dokumentum
           </h3>
-          <p className="text-slate-500 mb-6">
+          <p className="mx-auto mt-3 max-w-xl text-[color:var(--muted)]">
             Húzd ide a biztonsági adatlapokat (PDF), vagy kattints a tallózáshoz. Akár többet is kijelölhetsz.
           </p>
-          <button className="px-6 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition">
+          <button className="app-button-primary mt-6">
             + Elemek hozzáadása
           </button>
 
           {/* Upload limit indicator */}
           {uploadLimit.limit !== Infinity && (
-            <div className="mt-6 pt-6 border-t border-slate-200">
-              <p className="text-sm text-slate-600 mb-3">
-                <span className="font-medium">{uploadLimit.remaining}/{uploadLimit.limit}</span> feltöltés marad ma
+            <div className="mt-8 border-t border-[color:var(--border)] pt-6">
+              <p className="mb-3 text-sm text-[color:var(--muted)]">
+                <span className="font-semibold text-[color:var(--foreground)]">{uploadLimit.remaining}/{uploadLimit.limit}</span> feltöltés marad ma
               </p>
               {!user && (
                 <Link
                   href="/register"
-                  className="inline-block bg-gradient-to-r from-blue-600 to-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium hover:shadow-lg transition"
+                  className="app-button-secondary"
                 >
                   Regisztrálj az unlimited feltöltéshez →
                 </Link>
@@ -228,24 +227,23 @@ export default function SDSUploader() {
 
       {/* STATE: UPLOADING / SUCCESS (Wireframe 02) */}
       {(state.status === "UPLOADING" || state.status === "SUCCESS") && (
-        <div className="border border-slate-200 rounded-xl p-8 shadow-sm bg-white">
-          <div className="flex items-center space-x-4 mb-6">
-            <div className="p-3 bg-blue-50 rounded-lg text-blue-600 font-bold">
+        <div className="app-card-strong p-6 sm:p-8">
+          <div className="mb-6 flex items-center gap-4">
+            <div className="rounded-2xl bg-[color:var(--accent-soft)] px-3 py-3 font-bold text-[color:var(--accent-strong)]">
               PDF
             </div>
             <div className="flex-1">
-              <p className="font-medium text-slate-900">
+              <p className="font-medium text-[color:var(--foreground)]">
                 {state.fileNames.length === 1 ? state.fileNames[0] : `${state.fileNames.length} fájl kiválasztva`}
               </p>
-              <p className="text-sm text-slate-500">
+              <p className="text-sm text-[color:var(--muted)]">
                 {state.status === "UPLOADING"
                   ? "Feldolgozás alatt..."
                   : "Feldolgozás sikeres!"}
               </p>
             </div>
             {state.status === "SUCCESS" && (
-              <div className="text-green-500 bg-green-50 p-2 rounded-full">
-                {/* Check Icon */}
+              <div className="rounded-full bg-[color:var(--success-soft)] p-2 text-[color:var(--success)]">
                 <svg
                   className="w-6 h-6"
                   fill="none"
@@ -264,10 +262,10 @@ export default function SDSUploader() {
           </div>
 
           {/* Progress Bar */}
-          <div className="w-full bg-slate-100 rounded-full h-2.5 mb-6 overflow-hidden">
+          <div className="mb-6 h-2.5 w-full overflow-hidden rounded-full bg-[color:var(--surface-soft)]">
             <div
               className={`h-2.5 rounded-full transition-all duration-300 ${
-                state.status === "SUCCESS" ? "bg-green-500" : "bg-blue-600"
+                state.status === "SUCCESS" ? "bg-[color:var(--success)]" : "bg-[color:var(--accent)]"
               }`}
               style={{ width: `${state.progress}%` }}
             ></div>
@@ -276,7 +274,7 @@ export default function SDSUploader() {
           {state.status === "SUCCESS" && (
             <div className="flex justify-end">
               <button
-                className="flex items-center px-6 py-2 bg-slate-900 text-white rounded-lg hover:bg-slate-800 transition"
+                className="app-button-primary"
                 onClick={() => router.push("/results")}
               >
                 Eredmények megtekintése →
@@ -288,11 +286,10 @@ export default function SDSUploader() {
 
       {/* STATE: ERROR (Wireframe 03) */}
       {state.status === "ERROR" && (
-        <div className="border border-red-200 bg-red-50 rounded-xl p-8 text-center">
-          <div className="flex justify-center mb-4">
-            {/* X Icon */}
+        <div className="app-card-strong border-[color:var(--danger-soft)] bg-[color:var(--danger-soft)] p-8 text-center">
+          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-[color:var(--danger-soft)] text-[color:var(--danger)]">
             <svg
-              className="w-12 h-12 text-red-500"
+              className="h-8 w-8"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -305,14 +302,14 @@ export default function SDSUploader() {
               />
             </svg>
           </div>
-          <h3 className="text-lg font-bold text-red-800 mb-2">
+          <h3 className="mb-2 text-lg font-bold text-[color:var(--danger)]">
             Hiba történt a feldolgozás során
           </h3>
-          <p className="text-red-600 mb-6">{state.errorMessage}</p>
+          <p className="mb-6 text-[color:var(--danger)]">{state.errorMessage}</p>
 
           <button
             onClick={handleReset}
-            className="px-6 py-2 border border-red-300 text-red-700 rounded-lg hover:bg-red-100 transition"
+            className="app-button-secondary border-[color:var(--danger-soft)] text-[color:var(--danger)] hover:bg-[color:var(--danger-soft)]"
           >
             Újra megpróbálom
           </button>

@@ -53,11 +53,11 @@ export default function FilesClient({ files, onFilesChange }: FilesClientProps) 
 
   if (files.length === 0) {
     return (
-      <div className="text-center py-12 bg-white rounded-lg border border-slate-200">
-        <p className="text-slate-500 mb-4">Még nincsenek feltöltött fájlok</p>
+      <div className="app-card-strong p-10 text-center">
+        <p className="mb-4 text-[color:var(--muted)]">Még nincsenek feltöltött fájlok</p>
         <Link
           href="/"
-          className="inline-block bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
+          className="app-button-primary"
         >
           Első fájl feltöltése
         </Link>
@@ -70,11 +70,11 @@ export default function FilesClient({ files, onFilesChange }: FilesClientProps) 
       {files.map((file) => (
         <div
           key={file.id}
-          className="bg-white border border-slate-200 rounded-lg overflow-hidden hover:border-slate-300 transition-colors"
+          className="app-card-strong overflow-hidden transition-transform duration-200 hover:-translate-y-0.5"
         >
           {/* File Header */}
           <div
-            className="px-6 py-4 cursor-pointer hover:bg-slate-50 transition-colors"
+            className="cursor-pointer px-6 py-4 transition-colors hover:bg-[color:var(--surface-soft)]"
             onClick={() =>
               setExpandedId(expandedId === file.id ? null : file.id)
             }
@@ -83,7 +83,7 @@ export default function FilesClient({ files, onFilesChange }: FilesClientProps) 
               <div className="flex-1">
                 <div className="flex items-center gap-3">
                   <svg
-                    className={`w-5 h-5 text-blue-600 transition-transform ${
+                    className={`h-5 w-5 text-[color:var(--accent-strong)] transition-transform ${
                       expandedId === file.id ? "rotate-90" : ""
                     }`}
                     fill="none"
@@ -98,17 +98,17 @@ export default function FilesClient({ files, onFilesChange }: FilesClientProps) 
                     />
                   </svg>
                   <div>
-                    <h3 className="font-semibold text-slate-900">
+                    <h3 className="font-semibold text-[color:var(--foreground)]">
                       {file.fileName}
                     </h3>
-                    <p className="text-sm text-slate-500">
+                    <p className="text-sm text-[color:var(--muted)]">
                       {file.data.productName}
                     </p>
                   </div>
                 </div>
               </div>
               <div className="text-right">
-                <p className="text-sm text-slate-500">
+                <p className="text-sm text-[color:var(--muted)]">
                   {formatDate(file.uploadDate)}
                 </p>
               </div>
@@ -117,31 +117,31 @@ export default function FilesClient({ files, onFilesChange }: FilesClientProps) 
 
           {/* File Details (Expanded) */}
           {expandedId === file.id && (
-            <div className="border-t border-slate-200 px-6 py-4 bg-slate-50">
+            <div className="border-t border-[color:var(--border)] px-6 py-4 bg-[color:var(--surface-soft)]">
               {/* Product Name */}
               <div className="mb-6">
-                <h4 className="font-semibold text-slate-900 mb-2">
+                <h4 className="mb-2 font-semibold text-[color:var(--foreground)]">
                   Terméknév
                 </h4>
-                <p className="text-slate-700">{file.data.productName}</p>
+                <p className="text-[color:var(--foreground)]">{file.data.productName}</p>
               </div>
 
               {/* Ingredients */}
               {file.data.ingredients.length > 0 && (
                 <div className="mb-6">
-                  <h4 className="font-semibold text-slate-900 mb-2">
+                  <h4 className="mb-2 font-semibold text-[color:var(--foreground)]">
                     Összetevők ({file.data.ingredients.length})
                   </h4>
                   <div className="space-y-2">
                     {file.data.ingredients.map((ingredient, idx) => (
-                      <div key={idx} className="text-sm bg-white p-3 rounded border border-slate-200">
-                        <div className="font-medium text-slate-900">
+                      <div key={idx} className="app-card-soft p-3 text-sm">
+                        <div className="font-medium text-[color:var(--foreground)]">
                           {ingredient.name}
                         </div>
-                        <div className="text-slate-600">
+                        <div className="text-[color:var(--muted)]">
                           CAS: {ingredient.casNumber}
                         </div>
-                        <div className="text-slate-600">
+                        <div className="text-[color:var(--muted)]">
                           Koncentráció: {ingredient.concentration}
                         </div>
                       </div>
@@ -153,14 +153,14 @@ export default function FilesClient({ files, onFilesChange }: FilesClientProps) 
               {/* Hazard Classes */}
               {file.data.hazardClasses.length > 0 && (
                 <div className="mb-6">
-                  <h4 className="font-semibold text-slate-900 mb-2">
+                  <h4 className="mb-2 font-semibold text-[color:var(--foreground)]">
                     Veszélyességi osztályok
                   </h4>
                   <div className="flex flex-wrap gap-2">
                     {file.data.hazardClasses.map((hazard, idx) => (
                       <span
                         key={idx}
-                        className="inline-block bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-sm"
+                        className="app-chip app-soft-warning"
                       >
                         {hazard}
                       </span>
@@ -172,10 +172,10 @@ export default function FilesClient({ files, onFilesChange }: FilesClientProps) 
               {/* H-Statements */}
               {file.data.hStatements.length > 0 && (
                 <div className="mb-6">
-                  <h4 className="font-semibold text-slate-900 mb-2">
+                  <h4 className="mb-2 font-semibold text-[color:var(--foreground)]">
                     H-mondatok
                   </h4>
-                  <ul className="space-y-1 text-sm text-slate-700">
+                  <ul className="space-y-1 text-sm text-[color:var(--foreground)]">
                     {file.data.hStatements.map((statement, idx) => (
                       <li key={idx} className="ml-4">
                         • {statement}
@@ -188,10 +188,10 @@ export default function FilesClient({ files, onFilesChange }: FilesClientProps) 
               {/* P-Statements */}
               {file.data.pStatements.length > 0 && (
                 <div className="mb-6">
-                  <h4 className="font-semibold text-slate-900 mb-2">
+                  <h4 className="mb-2 font-semibold text-[color:var(--foreground)]">
                     P-mondatok
                   </h4>
-                  <ul className="space-y-1 text-sm text-slate-700">
+                  <ul className="space-y-1 text-sm text-[color:var(--foreground)]">
                     {file.data.pStatements.map((statement, idx) => (
                       <li key={idx} className="ml-4">
                         • {statement}
@@ -202,11 +202,11 @@ export default function FilesClient({ files, onFilesChange }: FilesClientProps) 
               )}
 
               {/* Action Buttons */}
-              <div className="flex gap-3 pt-4 border-t border-slate-200">
+              <div className="flex gap-3 pt-4 border-t border-[color:var(--border)]">
                 <button
                   onClick={() => handleDelete(file.id)}
                   disabled={deleting === file.id}
-                  className="flex-1 bg-red-50 text-red-600 hover:bg-red-100 disabled:opacity-50 px-4 py-2 rounded-md transition-colors font-medium text-sm"
+                  className="app-button-secondary flex-1 border-[color:var(--danger-soft)] text-[color:var(--danger)] hover:bg-[color:var(--danger-soft)] disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   {deleting === file.id ? "Törlés folyamatban..." : "Törlés"}
                 </button>
@@ -217,7 +217,7 @@ export default function FilesClient({ files, onFilesChange }: FilesClientProps) 
                       JSON.stringify([file.data])
                     )
                   }
-                  className="flex-1 bg-blue-50 text-blue-600 hover:bg-blue-100 px-4 py-2 rounded-md transition-colors font-medium text-sm"
+                  className="app-button-secondary flex-1 border-[color:var(--accent-soft)] text-[color:var(--accent-strong)] hover:bg-[color:var(--accent-soft)]"
                 >
                   <Link href="/results">Megtekintés</Link>
                 </button>
