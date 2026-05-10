@@ -29,7 +29,7 @@ export default function SDSUploader() {
     return null;
   };
 
-  const simulateUpload = (file: File) => {
+  const simulateUpload = async (file: File) => {
     const error = validateFile(file);
     if (error) {
       setState({
@@ -44,17 +44,44 @@ export default function SDSUploader() {
     // Happy Path indítása (US-01 / AC1)
     setState({ status: "UPLOADING", fileName: file.name, progress: 0 });
 
-    // Mock progress simulation (Backend hívás helyett)
+    // Progress simulation while waiting for backend
     let progress = 0;
     const interval = setInterval(() => {
       progress += 10;
+      if (progress > 90) progress = 90; // Capped at 90% until response
       setState((prev) => ({ ...prev, progress }));
+    }, 300);
 
-      if (progress >= 100) {
-        clearInterval(interval);
-        setState((prev) => ({ ...prev, status: "SUCCESS" }));
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const response = await fetch("/api/extract", {
+        method: "POST",
+        body: formData,
+      });
+
+      clearInterval(interval);
+
+      if (!response.ok) {
+        throw new Error("Hiba a szerver oldalon");
       }
-    }, 300); // 300ms * 10 = 3 mp szimulált feldolgozás
+
+      const result = await response.json();
+      
+      // Save data for the results page
+      sessionStorage.setItem("extractedData", JSON.stringify(result.data));
+
+      setState((prev) => ({ ...prev, progress: 100, status: "SUCCESS" }));
+    } catch (err) {
+      clearInterval(interval);
+      setState({
+        status: "ERROR",
+        fileName: file.name,
+        progress: 0,
+        errorMessage: "Hiba történt a fájl feldolgozása során.",
+      });
+    }
   };
 
   // --- Event Handlers ---
