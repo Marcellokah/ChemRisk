@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import FilesClient from "./FilesClient";
 import Header from "../components/Header";
 import { ExtractedData } from "../types";
@@ -13,6 +14,7 @@ interface FileRecord {
 }
 
 export default function FilesPage() {
+  const router = useRouter();
   const [files, setFiles] = useState<FileRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -21,6 +23,10 @@ export default function FilesPage() {
     const fetchFiles = async () => {
       try {
         const response = await fetch("/api/files");
+        if (response.status === 401) {
+          router.push("/login");
+          return;
+        }
         if (!response.ok) throw new Error("Hiba a fájlok lekérésekor");
         const { files } = await response.json();
         setFiles(files);

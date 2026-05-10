@@ -5,13 +5,24 @@ import { parseToken, canUpload, recordUpload } from "../../lib/auth";
 
 export async function POST(request: NextRequest) {
   try {
-    // Check upload limit
+    // Require authentication
     const token = request.cookies.get("auth_token")?.value;
-    let userId: string | undefined = undefined;
+    
+    if (!token) {
+      return NextResponse.json(
+        { error: "Bejelentkezés szükséges a dokumentumok feltöltéséhez" },
+        { status: 401 }
+      );
+    }
 
-    if (token) {
-      const parsed = parseToken(token);
-      userId = parsed?.userId;
+    const parsed = parseToken(token);
+    const userId = parsed?.userId;
+
+    if (!userId) {
+      return NextResponse.json(
+        { error: "Érvénytelen bejelentkezés" },
+        { status: 401 }
+      );
     }
 
     const ipAddress =

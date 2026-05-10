@@ -1,12 +1,14 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import ResultsClient from "./ResultsClient";
 import Header from "../components/Header";
 import { ExtractedData } from "../types";
 
 export default function ResultsPage() {
+  const router = useRouter();
   const [dataList, setDataList] = useState<ExtractedData[] | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -21,6 +23,11 @@ export default function ResultsPage() {
         }
 
         const response = await fetch("/api/files");
+        if (response.status === 401) {
+          // Redirect to login
+          router.push("/login");
+          return;
+        }
         if (!response.ok) {
           throw new Error("Nem sikerült betölteni a mentett eredményeket.");
         }

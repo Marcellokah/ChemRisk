@@ -107,7 +107,7 @@ export default function SDSUploader() {
       // Save each file to the persistent file database
       try {
         for (const result of results) {
-          await fetch("/api/files", {
+          const saveResponse = await fetch("/api/files", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -117,10 +117,18 @@ export default function SDSUploader() {
               data: result,
             }),
           });
+
+          if (saveResponse.status === 401) {
+            throw new Error("Bejelentkezés szükséges a dokumentumok mentéséhez");
+          }
+
+          if (!saveResponse.ok) {
+            throw new Error("A dokumentumok mentése sikertelen");
+          }
         }
       } catch (err) {
         console.warn("Fájlok mentése sikertelen:", err);
-        // Continue anyway - files were processed successfully
+        throw err; // Re-throw to show error state
       }
 
       setState((prev) => ({ ...prev, progress: 100, status: "SUCCESS" }));

@@ -11,3 +11,12 @@ export const DATA_DIR = path.resolve(
 export const USERS_FILE = path.join(DATA_DIR, "users.json");
 export const UPLOADS_FILE = path.join(DATA_DIR, "uploads.json");
 export const FILES_INDEX = path.join(DATA_DIR, "files.json");
+
+// Per-user file storage
+export function getUserFilesDir(userId: string): string {
+  return path.join(DATA_DIR, "users", userId);
+}
+
+export function getUserFilesIndex(userId: string): string {
+  return path.join(getUserFilesDir(userId), "files.json");
+}

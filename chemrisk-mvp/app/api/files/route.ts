@@ -1,41 +1,58 @@
 import { NextRequest, NextResponse } from "next/server";
 import * as fs from "fs";
+import * as path from "path";
 import { ExtractedData } from "../../types";
-import { DATA_DIR, FILES_INDEX } from "../../lib/dataPaths";
+import { getUserFilesIndex } from "../../lib/dataPaths";
+import { parseToken } from "../../lib/auth";
 
 export const dynamic = "force-dynamic";
 
-// Ensure data directory exists
-function ensureDataDir() {
-  if (!fs.existsSync(DATA_DIR)) {
-    fs.mkdirSync(DATA_DIR, { recursive: true });
+// Get user ID from request
+function getUserId(request: NextRequest): string | null {
+  const token = request.cookies.get("auth_token")?.value;
+  if (!token) return null;
+  const parsed = parseToken(token);
+  return parsed?.userId || null;
+}
+
+// Ensure user data directory exists
+function ensureUserDataDir(userId: string) {
+  const userDir = path.dirname(getUserFilesIndex(userId));
+  if (!fs.existsSync(userDir)) {
+    fs.mkdirSync(userDir, { recursive: true });
   }
 }
 
-// Load all files metadata
-function loadFilesIndex(): Array<{ id: string; fileName: string; uploadDate: string; data: ExtractedData }> {
-  ensureDataDir();
-  if (!fs.existsSync(FILES_INDEX)) {
+// Load user files metadata
+function loadFilesIndex(userId: string): Array<{ id: string; fileName: string; uploadDate: string; data: ExtractedData }> {
+  ensureUserDataDir(userId);
+  const filesIndex = getUserFilesIndex(userId);
+  if (!fs.existsSync(filesIndex)) {
     return [];
   }
   try {
-    const content = fs.readFileSync(FILES_INDEX, "utf-8");
+    const content = fs.readFileSync(filesIndex, "utf-8");
     return JSON.parse(content);
   } catch {
     return [];
   }
 }
 
-// Save files metadata
-function saveFilesIndex(files: Array<{ id: string; fileName: string; uploadDate: string; data: ExtractedData }>) {
-  ensureDataDir();
-  fs.writeFileSync(FILES_INDEX, JSON.stringify(files, null, 2));
+// Save user files metadata
+function saveFilesIndex(userId: string, files: Array<{ id: string; fileName: string; uploadDate: string; data: ExtractedData }>) {
+  ensureUserDataDir(userId);
+  const filesIndex = getUserFilesIndex(userId);
+  fs.writeFileSync(filesIndex, JSON.stringify(files, null, 2));
 }
 
-// GET: Retrieve all files
-export async function GET() {
+// GET: Retrieve user's files
+export async function GET(request: NextRequest) {
   try {
-    const files = loadFilesIndex();
+    const userId = getUserId(request);
+    if (!userId) {
+      return NextResponse.json({ error: "Bejelentkezés szükséges" }, { status: 401 });
+    }
+    const files = loadFilesIndex(userId);
     return NextResponse.json({ files }, { status: 200 });
   } catch (error) {
     return NextResponse.json({ error: "Hiba a fájlok lekérésekor" }, { status: 500 });
@@ -45,6 +62,11 @@ export async function GET() {
 // POST: Save a new file
 export async function POST(request: NextRequest) {
   try {
+    const userId = getUserId(request);
+    if (!userId) {
+      return NextResponse.json({ error: "Bejelentkezés szükséges" }, { status: 401 });
+    }
+
     const { fileName, data } = await request.json();
 
     if (!fileName || !data) {
@@ -54,7 +76,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const files = loadFilesIndex();
+    const files = loadFilesIndex(userId);
     const id = Date.now().toString();
     const newFile = {
       id,
@@ -64,7 +86,7 @@ export async function POST(request: NextRequest) {
     };
 
     files.push(newFile);
-    saveFilesIndex(files);
+    saveFilesIndex(userId, files);
 
     return NextResponse.json({ file: newFile }, { status: 201 });
   } catch (error) {
@@ -75,6 +97,11 @@ export async function POST(request: NextRequest) {
 // DELETE: Delete a file by ID
 export async function DELETE(request: NextRequest) {
   try {
+    const userId = getUserId(request);
+    if (!userId) {
+      return NextResponse.json({ error: "Bejelentkezés szükséges" }, { status: 401 });
+    }
+
     const { searchParams } = new URL(request.url);
     const id = searchParams.get("id");
 
@@ -82,14 +109,14 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json({ error: "Hiányzó id" }, { status: 400 });
     }
 
-    const files = loadFilesIndex();
+    const files = loadFilesIndex(userId);
     const filteredFiles = files.filter((f) => f.id !== id);
 
     if (filteredFiles.length === files.length) {
       return NextResponse.json({ error: "Fájl nem található" }, { status: 404 });
     }
 
-    saveFilesIndex(filteredFiles);
+    saveFilesIndex(userId, filteredFiles);
     return NextResponse.json({ message: "Fájl törölve" }, { status: 200 });
   } catch (error) {
     return NextResponse.json({ error: "Hiba a fájl törlésekor" }, { status: 500 });
