@@ -8,7 +8,7 @@ body:
     attributes:
       label: Short Title
       description: 'Clear, concise summary of the issue.'
-      placeholder: Example: User cannot save risk scenario
+      placeholder: 'Example: User cannot save risk scenario'
       required: true
   - type: dropdown
     id: type
