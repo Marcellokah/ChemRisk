@@ -67,9 +67,17 @@ export async function POST(request: NextRequest) {
           type: SchemaType.STRING, 
           description: "A termék neve (Product name)" 
         },
+        manufacturerDistributor: {
+          type: SchemaType.STRING,
+          description: "Gyártó vagy forgalmazó neve"
+        },
+        physicalState: {
+          type: SchemaType.STRING,
+          description: "Halmazállapot (pl. folyadék, szilárd, gáz)"
+        },
         ingredients: {
           type: SchemaType.ARRAY,
-          description: "Az összetevők (Ingredients)",
+          description: "A veszélyes összetevők (Hazardous ingredients)",
           items: {
             type: SchemaType.OBJECT,
             properties: {
@@ -95,8 +103,76 @@ export async function POST(request: NextRequest) {
           description: "P-mondatok a kódjukkal (Precautionary statements with code, e.g. P210: Hőtől távol tartandó...)",
           items: { type: SchemaType.STRING },
         },
+        clpLabeling: {
+          type: SchemaType.STRING,
+          description: "CLP jelölés (pl. GHS 02, GHS 07)"
+        },
+        limitAK: {
+          type: SchemaType.STRING,
+          description: "ÁK határérték, ha szerepel"
+        },
+        limitCK: {
+          type: SchemaType.STRING,
+          description: "CK határérték, ha szerepel"
+        },
+        mutagenic: {
+          type: SchemaType.STRING,
+          description: "Mutagén-e (1A vagy 1B): Igen/Nem/Nincs"
+        },
+        carcinogenic: {
+          type: SchemaType.STRING,
+          description: "Rákkeltő-e (1A vagy 1B): Igen/Nem/Nincs"
+        },
+        reprotox: {
+          type: SchemaType.STRING,
+          description: "Reprotox-e (1A vagy 1B): Igen/Nem/Nincs"
+        },
+        endocrineDisruptor: {
+          type: SchemaType.STRING,
+          description: "Endokrin károsító-e: Igen/Nem/Nincs"
+        },
+        ppeBodyProtection: {
+          type: SchemaType.STRING,
+          description: "Egyéni védőeszköz: egész test védelem"
+        },
+        ppeRespiratory: {
+          type: SchemaType.STRING,
+          description: "Egyéni védőeszköz: légzésvédő"
+        },
+        ppeGloves: {
+          type: SchemaType.STRING,
+          description: "Egyéni védőeszköz: védőkesztyű specifikáció"
+        },
+        ppeFaceProtection: {
+          type: SchemaType.STRING,
+          description: "Egyéni védőeszköz: arcvédelem"
+        },
+        ppeEyeProtection: {
+          type: SchemaType.STRING,
+          description: "Egyéni védőeszköz: szemvédelem specifikáció"
+        },
       },
-      required: ["productName", "ingredients", "hazardClasses", "hStatements", "pStatements"],
+      required: [
+        "productName",
+        "manufacturerDistributor",
+        "physicalState",
+        "ingredients",
+        "hazardClasses",
+        "hStatements",
+        "pStatements",
+        "clpLabeling",
+        "limitAK",
+        "limitCK",
+        "mutagenic",
+        "carcinogenic",
+        "reprotox",
+        "endocrineDisruptor",
+        "ppeBodyProtection",
+        "ppeRespiratory",
+        "ppeGloves",
+        "ppeFaceProtection",
+        "ppeEyeProtection"
+      ],
     };
 
     const model = genAI.getGenerativeModel({
@@ -112,13 +188,28 @@ export async function POST(request: NextRequest) {
     const buffer = Buffer.from(arrayBuffer);
     const base64Data = buffer.toString("base64");
 
-    const prompt = `Kérlek elemezd a mellékelt biztonsági adatlapot (PDF) és nyerd ki az alábbi adatokat:
-- A termék teljes nevét.
-- Az összetevők listáját, CAS számukat és koncentrációjukat. Ha nincs CAS szám, hagyd üresen vagy írd, hogy "N/A".
-- A veszélyességi osztályokat.
-- A H-mondatokat (veszélyt jelző mondatok) a kódjukkal együtt.
-- A P-mondatokat (óvintézkedésre vonatkozó mondatok) a kódjukkal együtt.
-A válaszod formátuma pontosan egyezzen meg a kért JSON sémával.`;
+    const prompt = `Kérlek elemezd a mellékelt biztonsági adatlapot (PDF) és nyerd ki az alábbi adatokat pontosan a JSON sémának megfelelően.
+
+  Kötelező szabályok:
+  - Csak a dokumentumban található információt használd.
+  - Ha egy mező nem található vagy nem alkalmazható, írj "N/A" vagy "Nincs".
+  - A mutagenic/carcinogenic/reprotox/endocrineDisruptor mezők értéke legyen: "Igen", "Nem" vagy "Nincs".
+  - A hStatements és pStatements mezőkben a kód és a szöveg együtt szerepeljen (pl. "H225: ...", "P210: ...").
+
+  Kinyerendő adatok:
+  - productName: termék / keverék neve.
+  - manufacturerDistributor: gyártó vagy forgalmazó.
+  - physicalState: halmazállapot.
+  - ingredients: veszélyes összetevők név, CAS, koncentráció.
+  - hazardClasses: veszélyességi osztályok.
+  - hStatements: H-mondatok kóddal.
+  - pStatements: P-mondatok kóddal.
+  - clpLabeling: CLP/GHS jelölés.
+  - limitAK és limitCK: határérték adatok, ha vannak.
+  - mutagenic, carcinogenic, reprotox, endocrineDisruptor.
+  - ppeBodyProtection, ppeRespiratory, ppeGloves, ppeFaceProtection, ppeEyeProtection.
+
+  A válaszod kizárólag a kért JSON legyen.`;
 
     const result = await model.generateContent([
       prompt,

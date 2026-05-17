@@ -4,10 +4,10 @@
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import ResultsClient from "../app/results/ResultsClient";
-import * as XLSX from "xlsx";
+import * as XLSX from "xlsx-js-style";
 
 // Mock the xlsx library
-jest.mock("xlsx", () => ({
+jest.mock("xlsx-js-style", () => ({
   utils: {
     json_to_sheet: jest.fn(() => ({})),
     book_new: jest.fn(() => ({})),
@@ -42,5 +42,22 @@ describe("ResultsClient Component", () => {
     fireEvent.click(button);
 
     expect(XLSX.writeFile).toHaveBeenCalled();
+  });
+
+  test("Az export a kötött oszlopmappinget használja és az emberi mezőket üresen hagyja", () => {
+    render(<ResultsClient dataList={mockDataList} />);
+
+    const button = screen.getByText("Exportálás Excel-be");
+    fireEvent.click(button);
+
+    const jsonToSheetMock = XLSX.utils.json_to_sheet as jest.Mock;
+    const firstRow = jsonToSheetMock.mock.calls[0][0][0];
+
+    expect(firstRow["Anyag / keverék neve"]).toBe("Test Product");
+    expect(firstRow["Veszélyes összetevők - CAS szám"]).toBe("123-45-6");
+    expect(firstRow["H mondat"]).toBe("100");
+    expect(firstRow["P mondat"]).toBe("100");
+    expect(firstRow["Exponált munkavállalók száma"]).toBe("");
+    expect(firstRow["Kockázati szint elfogadható?"]).toBe("");
   });
 });
